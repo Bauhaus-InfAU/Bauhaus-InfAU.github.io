@@ -54,7 +54,9 @@ h1 {
     margin-top: 0;
     color: var(--primary-text);
     margin-bottom: 20px;
-    font-weight: 600;
+    font-weight: 500;
+    text-align: center;
+    font-size: 64px;
 }
 .form-group {
     margin-bottom: 20px;
@@ -64,6 +66,33 @@ label {
     margin-bottom: 10px;
     font-weight: 500;
     color: var(--primary-text);
+}
+.week-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.week-button {
+    padding: 10px;
+    border: 2px solid var(--button-border);
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border-radius: 24px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: var(--font-main);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.week-button:hover {
+    background-color: var(--button-hover-bg);
+    color: var(--button-hover-text);
+}
+.week-button.selected {
+    background-color: var(--button-hover-bg);
+    color: var(--button-hover-text);
 }
 .group-buttons {
     display: grid;
@@ -96,10 +125,21 @@ input[type="number"] {
     width: 100%;
     padding: 8px;
     border: 1px solid var(--input-border);
-    border-radius: 24px;
+    border-radius: 48px;
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 56px;
     font-family: var(--font-main);
+    text-align:center;
+    /* Remove arrows for Chrome, Safari, Edge, Opera */
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+/* Remove arrows for Firefox */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 .submit-button {
     background-color: var(--primary-color);
@@ -128,11 +168,13 @@ input[type="number"] {
     background-color: var(--correct-bg);
     color: var(--correct-text);
     border: 1px solid var(--correct-border);
+    text-align: center;
 }
 .incorrect {
     background-color: var(--incorrect-bg);
     color: var(--incorrect-text);
     border: 1px solid var(--incorrect-border);
+    text-align: center;
 }
 #result h3 {
     margin-top: 0;
