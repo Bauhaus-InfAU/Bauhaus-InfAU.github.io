@@ -1,5 +1,3 @@
-// script.js
-
 let selectedGroup = null;
 let selectedWeek = null;
 

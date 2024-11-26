@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessibility Score Checker</title>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Score Checker</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -14,10 +14,22 @@
         <div class="form-group">
             <label>Select Week</label>
             <div class="week-buttons">
-                <button class="week-button" onclick="selectWeek(1)">Week 1</button>
-                <button class="week-button" onclick="selectWeek(2)">Week 2</button>
-                <button class="week-button" onclick="selectWeek(3)">Week 3</button>
-                <button class="week-button" onclick="selectWeek(4)">Week 4</button>
+                <button class="week-button" onclick="selectWeek(1)">
+                    Week 1
+                    <div class="tooltip">Calculate accessibility score using WCAG 2.1 Level A criteria</div>
+                </button>
+                <button class="week-button" onclick="selectWeek(2)">
+                    Week 2
+                    <div class="tooltip">Evaluate navigation and keyboard accessibility features</div>
+                </button>
+                <button class="week-button" onclick="selectWeek(3)">
+                    Week 3
+                    <div class="tooltip">Assess color contrast and text alternatives</div>
+                </button>
+                <button class="week-button" onclick="selectWeek(4)">
+                    Week 4
+                    <div class="tooltip">Review form controls and error handling</div>
+                </button>
             </div>
         </div>
 
@@ -36,8 +48,8 @@
         </div>
 
         <div class="form-group">
-            <label for="score">Your Calculated Accessibility Score</label>
-            <input type="number" id="score" step="0.1" min="0" max="100">
+            <label>Your Calculated Accessibility Score</label>
+            <input type="number" id="score" step="0.1" required>
         </div>
 
         <button class="submit-button" onclick="checkScore(event)">Check Answer</button>
