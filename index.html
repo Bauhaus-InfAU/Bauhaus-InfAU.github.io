@@ -22,15 +22,41 @@
         h1 {
             margin-top: 0;
             color: #333;
+            margin-bottom: 20px;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             font-weight: bold;
             color: #333;
+        }
+        .group-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .group-button {
+            padding: 10px;
+            border: 2px solid #4CAF50;
+            background-color: white;
+            color: #4CAF50;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .group-button:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .group-button.selected {
+            background-color: #4CAF50;
+            color: white;
         }
         input[type="number"] {
             width: 100%;
@@ -40,17 +66,17 @@
             box-sizing: border-box;
             font-size: 16px;
         }
-        button {
+        .submit-button {
             background-color: #4CAF50;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
             width: 100%;
         }
-        button:hover {
+        .submit-button:hover {
             background-color: #45a049;
         }
         #result {
@@ -76,45 +102,72 @@
         <h1>Accessibility Score Checker</h1>
         <form id="scoreForm" onsubmit="checkScore(event)">
             <div class="form-group">
-                <label for="group">Group Number:</label>
-                <input type="number" id="group" min="1" required>
+                <label>Select Your Group:</label>
+                <div class="group-buttons">
+                    <button type="button" class="group-button" onclick="selectGroup(1)">Group 1</button>
+                    <button type="button" class="group-button" onclick="selectGroup(2)">Group 2</button>
+                    <button type="button" class="group-button" onclick="selectGroup(3)">Group 3</button>
+                    <button type="button" class="group-button" onclick="selectGroup(4)">Group 4</button>
+                    <button type="button" class="group-button" onclick="selectGroup(5)">Group 5</button>
+                    <button type="button" class="group-button" onclick="selectGroup(6)">Group 6</button>
+                    <button type="button" class="group-button" onclick="selectGroup(7)">Group 7</button>
+                    <button type="button" class="group-button" onclick="selectGroup(8)">Group 8</button>
+                </div>
             </div>
             <div class="form-group">
                 <label for="score">Your Calculated Accessibility Score:</label>
                 <input type="number" id="score" step="0.01" required>
             </div>
-            <button type="submit">Check Answer</button>
+            <button type="submit" class="submit-button">Check Answer</button>
         </form>
         <div id="result"></div>
     </div>
 
     <script>
+        let selectedGroup = null;
+
         // Store correct answers for each group
         const correctAnswers = {
             1: 85.6,
             2: 72.3,
             3: 93.1,
             4: 67.8,
-            5: 88.9
+            5: 88.9,
+            6: 76.5,
+            7: 91.2,
+            8: 83.7
         };
+
+        function selectGroup(groupNum) {
+            // Remove selected class from all buttons
+            document.querySelectorAll('.group-button').forEach(button => {
+                button.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked button
+            const selectedButton = document.querySelector(`.group-button:nth-child(${groupNum})`);
+            selectedButton.classList.add('selected');
+            
+            selectedGroup = groupNum;
+        }
 
         function checkScore(event) {
             event.preventDefault();
-            const groupNum = document.getElementById('group').value;
+            
+            if (!selectedGroup) {
+                alert('Please select your group');
+                return;
+            }
+
             const userScore = parseFloat(document.getElementById('score').value);
             const resultDiv = document.getElementById('result');
             
-            if (!groupNum || !userScore) {
-                alert('Please fill in all fields');
+            if (!userScore && userScore !== 0) {
+                alert('Please enter your calculated score');
                 return;
             }
 
-            if (!correctAnswers[groupNum]) {
-                alert('Invalid group number');
-                return;
-            }
-
-            const correctScore = correctAnswers[groupNum];
+            const correctScore = correctAnswers[selectedGroup];
             const margin = 0.1; // Allow for small rounding differences
             const isCorrect = Math.abs(userScore - correctScore) <= margin;
 
