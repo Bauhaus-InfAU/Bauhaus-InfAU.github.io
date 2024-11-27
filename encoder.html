@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Value Encoder</title>
+    <style>
+        body {
+            font-family: monospace;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin: 10px 0;
+        }
+        .output {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <h2>Value Encoder</h2>
+    <p>Enter your values in this format (one week per line):<br>
+    19.5,70.0,35.8,90.0,19.5,125.0,45.0,38.3</p>
+    
+    <textarea id="input" placeholder="Enter your values here..."></textarea>
+    <button onclick="encode()">Encode Values</button>
+    
+    <h3>Encoded Result:</h3>
+    <div class="output" id="output"></div>
+
+    <script>
+        function encode() {
+            const input = document.getElementById('input').value;
+            const weeks = input.trim().split('\n');
+            
+            const encoded = weeks.map(week => {
+                const values = week.split(',').map(v => v.trim());
+                return values.map(score => {
+                    // Encode: multiply by 7.3 and convert to base64
+                    return btoa(String(Number(score) * 7.3));
+                });
+            });
+            
+            // Format output as JavaScript array
+            const output = 'const _0xf4e9 = [\n' +
+                encoded.map(week => 
+                    '    [\'' + week.join('\', \'') + '\']'
+                ).join(',\n') +
+                '\n];';
+            
+            document.getElementById('output').textContent = output;
+        }
+    </script>
+</body>
+</html>

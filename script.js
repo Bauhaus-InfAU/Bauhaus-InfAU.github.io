@@ -1,49 +1,39 @@
+// Encoded answer values
+const _0xf4e9 = [
+    ['MTQyLjM1', 'NTExLjA=', 'MjYxLjM0', 'NjU3LjA=', 'MTQyLjM1', 'OTEyLjU=', 'MzI4LjU=', 'Mjc5LjU5'], // Week 1
+    ['NjQzLjg2', 'NTUxLjg4', 'NjY3LjIy', 'NTEwLjI3', 'NjI5Ljk5', 'NTgyLjU0', 'NjgyLjU1', 'NTkyLjc2'], // Week 2
+    ['NjU3Ljcz', 'NTc1Ljk3', 'NjkxLjMx', 'NTM1LjgyJA==', 'NjU0LjA4', 'NjAwLjc5', 'Njk5LjM0', 'NjE2Ljg1'], // Week 3
+    ['Njc3LjQ0', 'NjA4LjgyJA==', 'NzAyLjI2', 'NTY3Ljk0', 'NjcwLjg3', 'NjI1LjYx', 'NzEwLjI5', 'NjQwLjk0'] // Week 4
+];
+
+// Track selected options
 let selectedGroup = null;
 let selectedWeek = null;
 
-const correctAnswers = {
-    1: {
-        1: 19.5,
-        2: 70,
-        3: 35.8,
-        4: 90,
-        5: 19.5,
-        6: 125,
-        7: 45,
-        8: 38.3
-    },
-    2: {
-        1: 88.2,
-        2: 75.6,
-        3: 91.4,
-        4: 69.9,
-        5: 86.3,
-        6: 79.8,
-        7: 93.5,
-        8: 81.2
-    },
-    3: {
-        1: 90.1,
-        2: 78.9,
-        3: 94.7,
-        4: 73.4,
-        5: 89.6,
-        6: 82.3,
-        7: 95.8,
-        8: 84.5
-    },
-    4: {
-        1: 92.8,
-        2: 83.4,
-        3: 96.2,
-        4: 77.8,
-        5: 91.9,
-        6: 85.7,
-        7: 97.3,
-        8: 87.8
-    }
-};
+// Initialize UI elements
+document.addEventListener('DOMContentLoaded', () => {
+    initializeButtons();
+    document.querySelector('form').addEventListener('submit', checkScore);
+});
 
+// Initialize week and group buttons
+function initializeButtons() {
+    // Week buttons
+    const weekButtons = document.querySelectorAll('.week-buttons button');
+    weekButtons.forEach((button, index) => {
+        button.classList.add('week-button');
+        button.addEventListener('click', () => selectWeek(index + 1));
+    });
+
+    // Group buttons
+    const groupButtons = document.querySelectorAll('.group-buttons button');
+    groupButtons.forEach((button, index) => {
+        button.classList.add('group-button');
+        button.addEventListener('click', () => selectGroup(index + 1));
+    });
+}
+
+// Week selection handler
 function selectWeek(weekNum) {
     document.querySelectorAll('.week-button').forEach((button) => {
         button.classList.remove('selected');
@@ -62,6 +52,7 @@ function selectWeek(weekNum) {
     document.getElementById('result').style.display = 'none';
 }
 
+// Group selection handler
 function selectGroup(groupNum) {
     if (!selectedWeek) {
         alert('Please select a week first');
@@ -78,43 +69,67 @@ function selectGroup(groupNum) {
     selectedGroup = groupNum;
 }
 
+// Score checking function
 function checkScore(event) {
     event.preventDefault();
 
-    if (!selectedWeek) {
-        alert('Please select your week');
-        return;
-    }
-
-    if (!selectedGroup) {
-        alert('Please select your group');
+    if (!selectedWeek || !selectedGroup) {
+        alert('Please select both week and group');
         return;
     }
 
     const userScore = parseFloat(document.getElementById('score').value);
-    const resultDiv = document.getElementById('result');
-
     if (isNaN(userScore)) {
-        alert('Please enter your calculated score');
+        alert('Please enter a valid score');
         return;
     }
 
-    const correctScore = correctAnswers[selectedWeek][selectedGroup];
-    const margin = 0.1;
+    // Decode and compare
+    const encodedCorrect = _0xf4e9[selectedWeek - 1][selectedGroup - 1];
+    const correctScore = Number(atob(encodedCorrect)) / 7.3;
+    
+    const margin = 0.01;
     const isCorrect = Math.abs(userScore - correctScore) <= margin;
 
+    const resultDiv = document.getElementById('result');
     resultDiv.style.display = 'block';
-    resultDiv.className = isCorrect ? 'correct' : 'incorrect';
-
+    
     if (isCorrect) {
+        resultDiv.className = 'correct';
         resultDiv.innerHTML = `
             <h3>Correct! ✅</h3>
-            <p>Your calculation matches the expected score of ${correctScore}.</p>
+            <p>Your calculation is correct</p>
         `;
     } else {
+        resultDiv.className = 'incorrect';
         resultDiv.innerHTML = `
             <h3>Not quite right ❌</h3>
-            <p>Please review your calculations and try again.</p>
+            <p>Please review your calculations and try again</p>
         `;
     }
 }
+
+// Prevent console inspection
+(function() {
+    const originalLog = console.log;
+    console.log = function(...args) {
+        if (args.some(arg => 
+            arg === _0xf4e9 || 
+            (typeof arg === 'string' && arg.includes('btoa')) || 
+            (typeof arg === 'string' && arg.includes('atob'))
+        )) {
+            return;
+        }
+        originalLog.apply(console, args);
+    };
+})();
+
+// Additional protection against direct variable access
+Object.defineProperty(window, '_0xf4e9', {
+    enumerable: false,
+    configurable: false,
+    writable: false
+});
+
+// Disable right-click to make inspection slightly harder
+document.addEventListener('contextmenu', (e) => e.preventDefault());
