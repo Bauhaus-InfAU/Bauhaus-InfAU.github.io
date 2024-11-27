@@ -1,10 +1,10 @@
 :root {
     /* Primary colors */
-    --primary-color: #181b97;
-    --primary-hover: #181b97;
-    --primary-text: #333333;
-    --accent: #181b97;
-    --offblack: #333333;
+    --primary-color: #3E47B1;
+    --primary-hover: #3E47B1;
+    --primary-text: #3E47B1;
+    --accent: #3E47B1;
+    --offblack: #3E47B1;
     --white: white;
     
     /* Background colors */
@@ -13,9 +13,9 @@
     
     /* Button colors */
     --button-bg: #ffffff;
-    --button-border: #333333;
-    --button-text: #333333;
-    --button-hover-bg: #181b97;
+    --button-border: #3E47B1;
+    --button-text: #3E47B1;
+    --button-hover-bg: #3E47B1;
     --button-hover-text: white;
     --button-tooltip-bg: #a9abd1;
     
@@ -28,7 +28,7 @@
     --incorrect-border: #e794a2;
     
     /* Input colors */
-    --input-border: #dddddd;
+    --input-border: #a9abd1;
 
     /* Font settings */
     --font-main: 'IBM Plex Mono', monospace;
@@ -74,14 +74,14 @@ label {
     white-space: nowrap;
 }
 
-.week-buttons {
+.task-buttons {
     display: grid;
     gap: 10px;
     margin-bottom: 20px;
     grid-template-columns: repeat(4, 1fr);
 }
 
-.week-button {
+.task-button {
     position: relative;
     padding: 10px;
     border: 2px solid var(--button-border);
@@ -95,13 +95,13 @@ label {
     transition: all 0.3s ease;
 }
 
-.week-button:hover {
+.task-button:hover {
     background-color: var(--button-hover-bg);
     border-color: var(--accent);
     color: var(--button-hover-text);
 }
 
-.week-button.selected {
+.task-button.selected {
     background-color: var(--button-hover-bg);
     border-color: var(--accent);
     color: var(--button-hover-text);
@@ -156,6 +156,10 @@ input[type="number"] {
     transition: all 0.3s ease;
 }
 
+input[type="number"]:focus {
+    outline-color: var(--accent);
+}
+
 input[type="number"].valid-input {
     border-color: var(--correct-border);
     background-color: var(--correct-bg);
@@ -196,6 +200,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .submit-button:hover {
     background-color: var(--primary-hover);
+    box-shadow: 0 2px 18px rgba(0,0,0,0.1);
+    transition: transform ease 0.3s;
+    transform: translate(0, -3px);
+    
 }
 
 /* Result styles */
@@ -231,7 +239,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 /* Media Breakpoints */
 @media screen and (max-width: 600px) {
-    .week-buttons,
+    .task-buttons,
     .group-buttons {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -242,7 +250,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 @media screen and (max-width: 400px) {
-    .week-buttons,
+    .task-buttons,
     .group-buttons {
         grid-template-columns: 1fr;
     }
@@ -266,7 +274,7 @@ input[type="number"]::-webkit-inner-spin-button {
         padding: 10px;
     }
     
-    .week-button,
+    .task-button,
     .group-button {
         padding: 8px;
         font-size: 14px;

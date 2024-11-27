@@ -1,14 +1,14 @@
 // Encoded answer values
 const _0xf4e9 = [
-    ['MTQyLjM1', 'NTExLjA=', 'MjYxLjM0', 'NjU3LjA=', 'MTQyLjM1', 'OTEyLjU=', 'MzI4LjU=', 'Mjc5LjU5'], // Week 1
-    ['NjQzLjg2', 'NTUxLjg4', 'NjY3LjIy', 'NTEwLjI3', 'NjI5Ljk5', 'NTgyLjU0', 'NjgyLjU1', 'NTkyLjc2'], // Week 2
-    ['NjU3Ljcz', 'NTc1Ljk3', 'NjkxLjMx', 'NTM1LjgyJA==', 'NjU0LjA4', 'NjAwLjc5', 'Njk5LjM0', 'NjE2Ljg1'], // Week 3
-    ['Njc3LjQ0', 'NjA4LjgyJA==', 'NzAyLjI2', 'NTY3Ljk0', 'NjcwLjg3', 'NjI1LjYx', 'NzEwLjI5', 'NjQwLjk0'] // Week 4
+    ['MTQyLjM1', 'NTExLjA=', 'MjYxLjM0', 'NjU3LjA=', 'MTQyLjM1', 'OTEyLjU=', 'MzI4LjU=', 'Mjc5LjU5'], // Task 1
+    ['NjQzLjg2', 'NTUxLjg4', 'NjY3LjIy', 'NTEwLjI3', 'NjI5Ljk5', 'NTgyLjU0', 'NjgyLjU1', 'NTkyLjc2'], // Task 2
+    ['NjU3Ljcz', 'NTc1Ljk3', 'NjkxLjMx', 'NTM1LjgyJA==', 'NjU0LjA4', 'NjAwLjc5', 'Njk5LjM0', 'NjE2Ljg1'], // Task 3
+    ['Njc3LjQ0', 'NjA4LjgyJA==', 'NzAyLjI2', 'NTY3Ljk0', 'NjcwLjg3', 'NjI1LjYx', 'NzEwLjI5', 'NjQwLjk0'] // Task 4
 ];
 
 // Track selected options
 let selectedGroup = null;
-let selectedWeek = null;
+let selectedTask = null;
 
 // Initialize UI elements
 document.addEventListener('DOMContentLoaded', () => {
@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreInput.addEventListener(event, resetInputToDefault);
     });
     
-    // Also reset when selecting new week/group
-    document.querySelectorAll('.week-button, .group-button').forEach(button => {
+    // Also reset when selecting new task/group
+    document.querySelectorAll('.task-button, .group-button').forEach(button => {
         button.addEventListener('click', resetInputToDefault);
     });
 });
@@ -37,13 +37,13 @@ function resetInputToDefault() {
     resultDiv.style.display = 'none';
 }
 
-// Initialize week and group buttons
+// Initialize task and group buttons
 function initializeButtons() {
-    // Week buttons
-    const weekButtons = document.querySelectorAll('.week-buttons button');
-    weekButtons.forEach((button, index) => {
-        button.classList.add('week-button');
-        button.addEventListener('click', () => selectWeek(index + 1));
+    // Task buttons
+    const taskButtons = document.querySelectorAll('.task-buttons button');
+    taskButtons.forEach((button, index) => {
+        button.classList.add('task-button');
+        button.addEventListener('click', () => selectTask(index + 1));
     });
 
     // Group buttons
@@ -54,17 +54,17 @@ function initializeButtons() {
     });
 }
 
-// Week selection handler
-function selectWeek(weekNum) {
-    document.querySelectorAll('.week-button').forEach((button) => {
+// Task selection handler
+function selectTask(taskNum) {
+    document.querySelectorAll('.task-button').forEach((button) => {
         button.classList.remove('selected');
     });
 
-    const selectedButton = document.querySelector(`.week-button:nth-child(${weekNum})`);
+    const selectedButton = document.querySelector(`.task-button:nth-child(${taskNum})`);
     selectedButton.classList.add('selected');
 
-    selectedWeek = weekNum;
-    // Reset group selection when week changes
+    selectedTask = taskNum;
+    // Reset group selection when task changes
     selectedGroup = null;
     document.querySelectorAll('.group-button').forEach((button) => {
         button.classList.remove('selected');
@@ -73,8 +73,8 @@ function selectWeek(weekNum) {
 
 // Group selection handler
 function selectGroup(groupNum) {
-    if (!selectedWeek) {
-        alert('Please select a week first');
+    if (!selectedTask) {
+        alert('Please select a task first');
         return;
     }
 
@@ -92,8 +92,8 @@ function selectGroup(groupNum) {
 function checkScore(event) {
     event.preventDefault();
 
-    if (!selectedWeek || !selectedGroup) {
-        alert('Please select both week and group');
+    if (!selectedTask || !selectedGroup) {
+        alert('Please select both task and group');
         return;
     }
 
@@ -107,7 +107,7 @@ function checkScore(event) {
     }
 
     // Decode and compare
-    const encodedCorrect = _0xf4e9[selectedWeek - 1][selectedGroup - 1];
+    const encodedCorrect = _0xf4e9[selectedTask - 1][selectedGroup - 1];
     const correctScore = Number(atob(encodedCorrect)) / 7.3;
     
     const margin = 0.01;
