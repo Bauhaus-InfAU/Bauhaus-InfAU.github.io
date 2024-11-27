@@ -111,12 +111,12 @@ function checkScore(event) {
     const correctScore = Number(atob(encodedCorrect)) / 7.3;
     
     const margin = 0.01;
-    const isCorrect = Math.abs(userScore - correctScore) <= margin;
+    const percentDiff = Math.abs((userScore - correctScore) / correctScore) * 100;
+    const isCorrect = percentDiff <= margin;
     
-    // Remove any existing validation classes
+    // Remove existing validation classes
     scoreInput.classList.remove('valid-input', 'invalid-input', 'default-input');
     
-    // Add appropriate validation class
     if (isCorrect) {
         scoreInput.classList.add('valid-input');
         resultDiv.className = 'correct';
@@ -127,9 +127,21 @@ function checkScore(event) {
     } else {
         scoreInput.classList.add('invalid-input');
         resultDiv.className = 'incorrect';
+        
+        let message;
+        if (percentDiff <= 5) {
+            message = "You're very close! Just a small adjustment needed in your calculations";
+        } else if (percentDiff <= 20) {
+            message = userScore > correctScore 
+                ? "Your answer is a bit high. Double-check your calculations"
+                : "Your answer is a bit low. Double-check your calculations";
+        } else {
+            message = "That's quite different from the expected result. Consider reviewing your approach - are you using the right formula?";
+        }
+        
         resultDiv.innerHTML = `
             <h3>Not quite right ❌</h3>
-            <p>Please review your calculations and try again</p>
+            <p>${message}</p>
         `;
     }
     resultDiv.style.display = 'block';
