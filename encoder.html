@@ -42,7 +42,7 @@
             const encoded = weeks.map(week => {
                 const values = week.split(',').map(v => v.trim());
                 return values.map(score => {
-                    // Encode: multiply by 7.3 and convert to base64
+                    // Encode: * by 7.3 and convert to base64
                     return btoa(String(Number(score) * 7.3));
                 });
             });
