@@ -12,18 +12,19 @@
     --bg-container: white;
     
     /* Button colors */
-    --button-bg: white;
-    --button-border: #181b97;
-    --button-text: #181b97;
+    --button-bg: #e6e6e6;
+    --button-border: #dfdfdf;
+    --button-text: #333333;
     --button-hover-bg: #181b97;
     --button-hover-text: white;
+    --button-tooltip-bg: #a9abd1;
     
     /* Result colors */
     --correct-bg: #dff0d8;
-    --correct-text: #3c763d;
-    --correct-border: #d6e9c6;
+    --correct-text: #3c765b;
+    --correct-border: #c6e9cf;
     --incorrect-bg: #f2dede;
-    --incorrect-text: #a94442;
+    --incorrect-text: #a94264;
     --incorrect-border: #ebccd1;
     
     /* Input colors */
@@ -79,7 +80,7 @@ label {
 .week-button {
     position: relative;
     padding: 10px;
-    border: 2px solid var(--button-border);
+    border: 0px solid var(--button-border);
     background-color: var(--button-bg);
     color: var(--button-text);
     border-radius: 24px;
@@ -88,7 +89,7 @@ label {
     font-weight: 500;
     font-family: var(--font-main);
     transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    
 }
 
 .tooltip {
@@ -96,8 +97,8 @@ label {
     bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
-    padding: 8px 12px;
-    background-color: #7374c4;
+    padding: 8px 16px;
+    background-color:var(--button-tooltip-bg);
     color: white;
     border-radius: 24px;
     font-size: 12px;
@@ -109,7 +110,7 @@ label {
     z-index: 1000;
     width: max-content;
     height: 32px;
-    max-width: 300px;
+    max-width: 250px;
     text-align: center;
 }
 
@@ -138,7 +139,7 @@ label {
 
 .group-button {
     padding: 10px;
-    border: 2px solid var(--button-border);
+    border: 0px solid var(--button-border);
     background-color: var(--button-bg);
     color: var(--button-text);
     border-radius: 24px;
@@ -147,7 +148,7 @@ label {
     font-weight: 500;
     font-family: var(--font-main);
     transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    
 }
 
 .group-button:hover {
@@ -163,7 +164,7 @@ label {
 input[type="number"] {
     width: 100%;
     padding: 8px;
-    border: 1px solid var(--input-border);
+    border: 2px solid var(--input-border);
     border-radius: 48px;
     box-sizing: border-box;
     font-size: 56px;
