@@ -12,8 +12,8 @@
     --bg-container: white;
     
     /* Button colors */
-    --button-bg: #e6e6e6;
-    --button-border: #dfdfdf;
+    --button-bg: #ffffff;
+    --button-border: #333333;
     --button-text: #333333;
     --button-hover-bg: #181b97;
     --button-hover-text: white;
@@ -22,10 +22,10 @@
     /* Result colors */
     --correct-bg: #dff0d8;
     --correct-text: #3c765b;
-    --correct-border: #c6e9cf;
+    --correct-border: #84cc96;
     --incorrect-bg: #f2dede;
     --incorrect-text: #a94264;
-    --incorrect-border: #ebccd1;
+    --incorrect-border: #e794a2;
     
     /* Input colors */
     --input-border: #dddddd;
@@ -55,7 +55,7 @@ h1 {
     margin-top: 0;
     color: var(--primary-text);
     margin-bottom: 20px;
-    font-weight: 500;
+    font-weight: 400;
     text-align: center;
     font-size: clamp(32px, 10vw, 64px);
     white-space: nowrap;
@@ -68,7 +68,7 @@ h1 {
 label {
     display: block;
     margin-bottom: 10px;
-    font-weight: 500;
+    font-weight: 400;
     color: var(--primary-text);
     font-size: clamp(6px, 10vw, 18px);
     white-space: nowrap;
@@ -84,51 +84,26 @@ label {
 .week-button {
     position: relative;
     padding: 10px;
-    border: 0px solid var(--button-border);
+    border: 2px solid var(--button-border);
     background-color: var(--button-bg);
     color: var(--button-text);
     border-radius: 100px;
     cursor: pointer;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 400;
     font-family: var(--font-main);
     transition: all 0.3s ease;
 }
 
-.tooltip {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 8px 16px;
-    background-color: var(--button-tooltip-bg);
-    color: white;
-    border-radius: 24px;
-    font-size: 12px;
-    white-space: normal;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.5s ease;
-    margin-bottom: 8px;
-    z-index: 1000;
-    width: max-content;
-    height: 32px;
-    max-width: 250px;
-    text-align: center;
-}
-
-.week-button:hover .tooltip {
-    opacity: 1;
-    visibility: visible;
-}
-
 .week-button:hover {
     background-color: var(--button-hover-bg);
+    border-color: var(--accent);
     color: var(--button-hover-text);
 }
 
 .week-button.selected {
     background-color: var(--button-hover-bg);
+    border-color: var(--accent);
     color: var(--button-hover-text);
 }
 
@@ -141,24 +116,26 @@ label {
 
 .group-button {
     padding: 10px;
-    border: 0px solid var(--button-border);
+    border: 2px solid var(--button-border);
     background-color: var(--button-bg);
     color: var(--button-text);
     border-radius: 100px;
     cursor: pointer;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 400;
     font-family: var(--font-main);
     transition: all 0.3s ease;
 }
 
 .group-button:hover {
     background-color: var(--button-hover-bg);
+    border-color: var(--accent);
     color: var(--button-hover-text);
 }
 
 .group-button.selected {
     background-color: var(--button-hover-bg);
+    border-color: var(--accent);
     color: var(--button-hover-text);
 }
 
@@ -213,7 +190,7 @@ input[type="number"]::-webkit-inner-spin-button {
     font-size: 16px;
     width: 100%;
     font-family: var(--font-main);
-    font-weight: 500;
+    font-weight: 400;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -233,18 +210,18 @@ input[type="number"]::-webkit-inner-spin-button {
 .correct {
     background-color: var(--correct-bg);
     color: var(--correct-text);
-    border: 1px solid var(--correct-border);
+    border: 0px solid var(--correct-border);
 }
 
 .incorrect {
     background-color: var(--incorrect-bg);
     color: var(--incorrect-text);
-    border: 1px solid var(--incorrect-border);
+    border: 0px solid var(--incorrect-border);
 }
 
 #result h3 {
     margin-top: 0;
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 8px;
 }
 
