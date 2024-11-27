@@ -56,7 +56,8 @@ h1 {
     margin-bottom: 20px;
     font-weight: 500;
     text-align: center;
-    font-size: 64px;
+    font-size: clamp(32px, 10vw, 64px);
+    white-space: nowrap;
 }
 
 .form-group {
@@ -68,13 +69,15 @@ label {
     margin-bottom: 10px;
     font-weight: 500;
     color: var(--primary-text);
+    font-size: clamp(6px, 10vw, 18px);
+    white-space: nowrap;
 }
 
 .week-buttons {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
     margin-bottom: 20px;
+    grid-template-columns: repeat(4, 1fr);
 }
 
 .week-button {
@@ -83,22 +86,21 @@ label {
     border: 0px solid var(--button-border);
     background-color: var(--button-bg);
     color: var(--button-text);
-    border-radius: 24px;
+    border-radius: 100px;
     cursor: pointer;
     font-size: 16px;
     font-weight: 500;
     font-family: var(--font-main);
     transition: all 0.3s ease;
-    
 }
 
 .tooltip {
-    position:absolute;
+    position: absolute;
     bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
     padding: 8px 16px;
-    background-color:var(--button-tooltip-bg);
+    background-color: var(--button-tooltip-bg);
     color: white;
     border-radius: 24px;
     font-size: 12px;
@@ -113,7 +115,6 @@ label {
     max-width: 250px;
     text-align: center;
 }
-
 
 .week-button:hover .tooltip {
     opacity: 1;
@@ -132,9 +133,9 @@ label {
 
 .group-buttons {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
     margin-bottom: 20px;
+    grid-template-columns: repeat(4, 1fr);
 }
 
 .group-button {
@@ -142,13 +143,12 @@ label {
     border: 0px solid var(--button-border);
     background-color: var(--button-bg);
     color: var(--button-text);
-    border-radius: 24px;
+    border-radius: 100px;
     cursor: pointer;
     font-size: 16px;
     font-weight: 500;
     font-family: var(--font-main);
     transition: all 0.3s ease;
-    
 }
 
 .group-button:hover {
@@ -224,4 +224,61 @@ input[type="number"]::-webkit-inner-spin-button {
 #result h3 {
     margin-top: 0;
     font-weight: 600;
+}
+
+/* Media Breakpoints */
+@media screen and (max-width: 600px) {
+    .week-buttons,
+    .group-buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    input[type="number"] {
+        font-size: 48px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .week-buttons,
+    .group-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .container {
+        padding: 15px;
+    }
+    
+    .tooltip {
+        max-width: 200px;
+    }
+    
+    input[type="number"] {
+        font-size: 40px;
+        padding: 6px;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .week-button,
+    .group-button {
+        padding: 8px;
+        font-size: 14px;
+    }
+    
+    .tooltip {
+        max-width: 180px;
+        font-size: 11px;
+    }
+    
+    input[type="number"] {
+        font-size: 32px;
+    }
+    
+    body {
+        padding: 10px;
+    }
 }
