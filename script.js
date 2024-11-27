@@ -17,12 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const scoreInput = document.getElementById('score');
     
-    // Function to reset input to default state
-    function resetInputToDefault() {
-        scoreInput.classList.remove('valid-input', 'invalid-input');
-        scoreInput.classList.add('default-input');
-    }
-    
     // Reset on any interaction
     ['input', 'focus', 'click', 'mousedown', 'touchstart'].forEach(event => {
         scoreInput.addEventListener(event, resetInputToDefault);
@@ -33,6 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', resetInputToDefault);
     });
 });
+
+// Reset input styles
+function resetInputToDefault() {
+    const scoreInput = document.getElementById('score');
+    const resultDiv = document.getElementById('result');
+    scoreInput.classList.remove('valid-input', 'invalid-input');
+    scoreInput.classList.add('default-input');
+    resultDiv.style.display = 'none';
+}
 
 // Initialize week and group buttons
 function initializeButtons() {
@@ -95,7 +98,9 @@ function checkScore(event) {
     }
 
     const scoreInput = document.getElementById('score');
+    const resultDiv = document.getElementById('result');
     const userScore = parseFloat(scoreInput.value);
+    
     if (isNaN(userScore)) {
         alert('Please enter a valid score');
         return;
@@ -114,9 +119,20 @@ function checkScore(event) {
     // Add appropriate validation class
     if (isCorrect) {
         scoreInput.classList.add('valid-input');
+        resultDiv.className = 'correct';
+        resultDiv.innerHTML = `
+            <h3>Correct! ✅</h3>
+            <p>Your calculation is correct</p>
+        `;
     } else {
         scoreInput.classList.add('invalid-input');
+        resultDiv.className = 'incorrect';
+        resultDiv.innerHTML = `
+            <h3>Not quite right ❌</h3>
+            <p>Please review your calculations and try again</p>
+        `;
     }
+    resultDiv.style.display = 'block';
 }
 
 // Prevent console inspection

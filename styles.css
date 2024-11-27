@@ -48,6 +48,7 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    min-height: 665px;
 }
 
 h1 {
@@ -173,13 +174,11 @@ input[type="number"] {
     -webkit-appearance: none;
     -moz-appearance: textfield;
     appearance: textfield;
-    transition: all 0.3s ease;
     background-color: white;
     color: var(--primary-text);
+    transition: all 0.3s ease;
 }
 
-
-/* Validation states */
 input[type="number"].valid-input {
     border-color: var(--correct-border);
     background-color: var(--correct-bg);
@@ -192,7 +191,6 @@ input[type="number"].invalid-input {
     color: var(--incorrect-text);
 }
 
-/* Explicit default state */
 input[type="number"].default-input {
     border-color: var(--input-border);
     background-color: white;
@@ -221,6 +219,37 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .submit-button:hover {
     background-color: var(--primary-hover);
+}
+
+/* Result styles */
+#result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 4px;
+    display: none;
+    text-align: center;
+}
+
+.correct {
+    background-color: var(--correct-bg);
+    color: var(--correct-text);
+    border: 1px solid var(--correct-border);
+}
+
+.incorrect {
+    background-color: var(--incorrect-bg);
+    color: var(--incorrect-text);
+    border: 1px solid var(--incorrect-border);
+}
+
+#result h3 {
+    margin-top: 0;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+#result p {
+    margin: 0;
 }
 
 /* Media Breakpoints */
