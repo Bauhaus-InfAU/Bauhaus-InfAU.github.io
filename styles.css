@@ -173,6 +173,30 @@ input[type="number"] {
     -webkit-appearance: none;
     -moz-appearance: textfield;
     appearance: textfield;
+    transition: all 0.3s ease;
+    background-color: white;
+    color: var(--primary-text);
+}
+
+
+/* Validation states */
+input[type="number"].valid-input {
+    border-color: var(--correct-border);
+    background-color: var(--correct-bg);
+    color: var(--correct-text);
+}
+
+input[type="number"].invalid-input {
+    border-color: var(--incorrect-border);
+    background-color: var(--incorrect-bg);
+    color: var(--incorrect-text);
+}
+
+/* Explicit default state */
+input[type="number"].default-input {
+    border-color: var(--input-border);
+    background-color: white;
+    color: var(--primary-text);
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -197,33 +221,6 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .submit-button:hover {
     background-color: var(--primary-hover);
-}
-
-#result {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 4px;
-    display: none;
-    font-family: var(--font-main);
-}
-
-.correct {
-    background-color: var(--correct-bg);
-    color: var(--correct-text);
-    border: 1px solid var(--correct-border);
-    text-align: center;
-}
-
-.incorrect {
-    background-color: var(--incorrect-bg);
-    color: var(--incorrect-text);
-    border: 1px solid var(--incorrect-border);
-    text-align: center;
-}
-
-#result h3 {
-    margin-top: 0;
-    font-weight: 600;
 }
 
 /* Media Breakpoints */

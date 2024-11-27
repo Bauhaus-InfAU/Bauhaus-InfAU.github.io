@@ -14,6 +14,24 @@ let selectedWeek = null;
 document.addEventListener('DOMContentLoaded', () => {
     initializeButtons();
     document.querySelector('form').addEventListener('submit', checkScore);
+    
+    const scoreInput = document.getElementById('score');
+    
+    // Function to reset input to default state
+    function resetInputToDefault() {
+        scoreInput.classList.remove('valid-input', 'invalid-input');
+        scoreInput.classList.add('default-input');
+    }
+    
+    // Reset on any interaction
+    ['input', 'focus', 'click', 'mousedown', 'touchstart'].forEach(event => {
+        scoreInput.addEventListener(event, resetInputToDefault);
+    });
+    
+    // Also reset when selecting new week/group
+    document.querySelectorAll('.week-button, .group-button').forEach(button => {
+        button.addEventListener('click', resetInputToDefault);
+    });
 });
 
 // Initialize week and group buttons
@@ -48,8 +66,6 @@ function selectWeek(weekNum) {
     document.querySelectorAll('.group-button').forEach((button) => {
         button.classList.remove('selected');
     });
-    // Hide any previous results
-    document.getElementById('result').style.display = 'none';
 }
 
 // Group selection handler
@@ -78,7 +94,8 @@ function checkScore(event) {
         return;
     }
 
-    const userScore = parseFloat(document.getElementById('score').value);
+    const scoreInput = document.getElementById('score');
+    const userScore = parseFloat(scoreInput.value);
     if (isNaN(userScore)) {
         alert('Please enter a valid score');
         return;
@@ -90,22 +107,15 @@ function checkScore(event) {
     
     const margin = 0.01;
     const isCorrect = Math.abs(userScore - correctScore) <= margin;
-
-    const resultDiv = document.getElementById('result');
-    resultDiv.style.display = 'block';
     
+    // Remove any existing validation classes
+    scoreInput.classList.remove('valid-input', 'invalid-input', 'default-input');
+    
+    // Add appropriate validation class
     if (isCorrect) {
-        resultDiv.className = 'correct';
-        resultDiv.innerHTML = `
-            <h3>Correct! ✅</h3>
-            <p>Your calculation is correct</p>
-        `;
+        scoreInput.classList.add('valid-input');
     } else {
-        resultDiv.className = 'incorrect';
-        resultDiv.innerHTML = `
-            <h3>Not quite right ❌</h3>
-            <p>Please review your calculations and try again</p>
-        `;
+        scoreInput.classList.add('invalid-input');
     }
 }
 
