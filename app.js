@@ -16,27 +16,22 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             alert('Failed to load data. Please try again later.');
         });
 
-    // Parse CSV text into an array of objects
-    function parseCSV(text) {
-        const lines = text.trim().split('\n');
-        const headers = lines[0].split('\t'); // Adjust delimiter if necessary
-        const data = lines.slice(1).map(line => {
-            const values = line.split('\t'); // Adjust delimiter if necessary
-            if (values.length !== headers.length) {
-                console.warn('Skipping line due to mismatched columns:', line);
-                return null;
-            }
-            const entry = {};
-            headers.forEach((header, index) => {
-                entry[header.trim()] = values[index] ? values[index].trim() : '';
+        function parseCSV(text) {
+            const lines = text.trim().split('\n');
+            const headers = lines[0].split(',');
+            const data = lines.slice(1).map(line => {
+                const values = line.split(',');
+                const entry = {};
+                headers.forEach((header, index) => {
+                    entry[header.trim()] = values[index] ? values[index].trim() : '';
+                });
+                // Parse week and task as numbers
+                entry.week = parseInt(entry.week, 10);
+                entry.task = parseInt(entry.task, 10);
+                return entry;
             });
-            // Parse week and task as numbers
-            entry.week = parseInt(entry.week, 10);
-            entry.task = parseInt(entry.task, 10);
-            return entry;
-        }).filter(entry => entry !== null); // Remove null entries
-        return data;
-    }
+            return data;
+        }
 
     // Main application initialization
     function initializeApp(data) {
