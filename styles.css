@@ -196,14 +196,14 @@ input[type="number"]::-webkit-inner-spin-button {
     font-family: var(--font-main);
     font-weight: 400;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    transform: translate(0, 0);
 }
 
 .submit-button:hover {
     background-color: var(--primary-hover);
     box-shadow: 0 2px 18px rgba(0,0,0,0.1);
-    transition: transform ease 0.3s;
     transform: translate(0, -3px);
-    
 }
 
 /* Result styles */
