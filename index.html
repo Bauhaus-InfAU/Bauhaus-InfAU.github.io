@@ -2,50 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Score Checker</title>
-    <link href="styles.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js" integrity="sha512-5dLYzjuLqvhWXIZS5Gs1vcdW6KxfBcGFSnyfNCM4YQKq1z9z3BqFI0uCUyjs7Gz5DhGnyYk8CCqAqgqpWQypkg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Score Checker App</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>SCORE CHECKER</h1>
-
-        <div class="form-group">
-            <label>SELECT WEEK</label>
-            <div class="week-buttons" id="weekButtons">
-                <!-- Dynamically populated -->
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>SELECT TASK</label>
-            <div class="task-buttons" id="taskButtons">
-                <!-- Dynamically populated -->
-            </div>
-        </div>
-
-        <div class="form-group" id="variantSection" style="display: none;">
-            <label>SELECT VARIANT</label>
-            <div class="variant-buttons" id="variantButtons">
-                <!-- Dynamically populated -->
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div id="questionText" class="question-text">
-                <!-- Dynamically populated -->
-            </div>
-            <div id="inputFields" class="input-fields">
-                <!-- Dynamically populated -->
-            </div>
-        </div>
-
-        <button class="submit-button" id="checkButton">CHECK ANSWER</button>
-
+        <h1>Score Checker App</h1>
+        <div id="week-selection" class="task-buttons"></div>
+        <div id="task-selection" class="task-buttons"></div>
+        <div id="variant-selection" class="task-buttons"></div>
+        <div id="question-container"></div>
+        <div id="input-fields"></div>
+        <button id="check-answer" class="submit-button">Check Answer</button>
         <div id="result"></div>
     </div>
-    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
