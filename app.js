@@ -82,7 +82,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 const button = document.createElement('button');
                 button.textContent = `Task ${task}`;
                 button.className = 'task-button';
-                if (taskData.tags.includes('bonus')) {
+                if (taskData.tags && taskData.tags.includes('bonus')) {
                     const badge = document.createElement('span');
                     badge.textContent = 'Bonus';
                     badge.style.marginLeft = '5px';
@@ -106,7 +106,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             const questions = data.filter(item => item.week === currentWeek && item.task === task);
             currentQuestion = questions[0];
             // Check for variants
-            if (currentQuestion['unique-variant'] === 'yes') {
+            if (currentQuestion && currentQuestion['unique-variant'] === 'yes') {
                 renderVariants(currentQuestion);
             } else {
                 renderQuestion(currentQuestion);
@@ -136,7 +136,12 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 
         // Render question and input fields
         function renderQuestion(question) {
-            questionContainer.textContent = question.question;
+            if (question && question.question) {
+                questionContainer.textContent = question.question;
+            } else {
+                questionContainer.textContent = 'Question not available.';
+                return;
+            }
             const fieldNumber = parseInt(question['field-number'], 10);
             const fieldNames = question['field-names'].split(',');
             inputFieldsContainer.innerHTML = '';
