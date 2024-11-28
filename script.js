@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadQuestionData() {
     try {
         // Using relative path for GitHub Pages
-        const response = await fetch('/course-questions.csv');
+        const response = await fetch('course-questions.csv');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -25,7 +25,6 @@ async function loadQuestionData() {
         initializeWeekButtons();
     } catch (error) {
         console.error('Error loading question data:', error);
-        // Show user-friendly error message
         document.getElementById('result').innerHTML = `
             <div class="incorrect">
                 <h3>Loading Error</h3>
@@ -45,15 +44,23 @@ function parseCSVData(csvText) {
         if (!lines[i].trim()) continue;
         
         const values = lines[i].split(',');
+        const fieldAnswers = values[5].replace(/"/g, '').split(',');
+        const fieldNumber = parseInt(values[6]);
+        const isUniqueVariant = values[3].toLowerCase() === 'yes';
+        
+        // For unique variants, calculate number of variants based on answers and field number
+        const variantCount = isUniqueVariant ? Math.floor(fieldAnswers.length / fieldNumber) : 1;
+        
         const question = {
             week: parseInt(values[0]),
             task: parseInt(values[1]),
             tags: values[2] ? values[2].split(';') : [],
-            uniqueVariant: values[3].toLowerCase() === 'yes',
+            uniqueVariant: isUniqueVariant,
             question: values[4],
-            fieldAnswers: values[5].split(';'),
-            fieldNumber: parseInt(values[6]),
-            fieldNames: values[7].split(';')
+            fieldAnswers: fieldAnswers,
+            fieldNumber: fieldNumber,
+            fieldNames: values[7].replace(/"/g, '').split(';'),
+            variantCount: variantCount
         };
         questions.push(question);
     }
@@ -107,8 +114,8 @@ function initializeVariantButtons(question) {
     section.style.display = 'block';
     container.innerHTML = '';
     
-    const variantCount = question.fieldAnswers.length;
-    for (let i = 0; i < variantCount; i++) {
+    // Create buttons based on calculated variant count
+    for (let i = 0; i < question.variantCount; i++) {
         const button = createButton(`Variant ${i + 1}`, () => selectVariant(i));
         container.appendChild(button);
     }
@@ -130,7 +137,7 @@ function selectWeek(week) {
     selectedVariant = null;
     
     // Update UI
-    updateButtonStates('week-buttons', week);
+    updateButtonStates('weekButtons', week, 'Week');
     initializeTaskButtons(week);
     clearResults();
     resetInputFields();
@@ -141,7 +148,7 @@ function selectTask(task) {
     selectedVariant = null;
     
     // Update UI
-    updateButtonStates('task-buttons', task);
+    updateButtonStates('taskButtons', task, 'Task');
     const question = getCurrentQuestion();
     if (question) {
         initializeVariantButtons(question);
@@ -156,7 +163,7 @@ function selectVariant(variant) {
     selectedVariant = variant;
     
     // Update UI
-    updateButtonStates('variant-buttons', variant);
+    updateButtonStates('variantButtons', variant, 'Variant');
     const question = getCurrentQuestion();
     if (question) {
         setupInputFields(question);
@@ -183,19 +190,16 @@ function setupInputFields(question) {
     // Clear previous inputs
     container.innerHTML = '';
     
-    // Get answers for selected variant if applicable
-    const relevantAnswers = question.uniqueVariant && selectedVariant !== null
-        ? [question.fieldAnswers[selectedVariant]]
-        : question.fieldAnswers;
+    // Calculate start index for variant's answers
+    const startIndex = question.uniqueVariant ? selectedVariant * question.fieldNumber : 0;
     
-    // Create the correct number of input fields based on fieldNumber
+    // Create the correct number of input fields
     for (let i = 0; i < question.fieldNumber; i++) {
         const group = document.createElement('div');
         group.className = 'input-group';
         
         const label = document.createElement('label');
         label.className = 'input-label';
-        // Use the field name if available, otherwise use a default
         const fieldName = question.fieldNames[Math.min(i, question.fieldNames.length - 1)];
         label.textContent = fieldName || `Value ${i + 1}`;
         
@@ -212,11 +216,12 @@ function setupInputFields(question) {
 }
 
 // Update button states helper
-function updateButtonStates(containerClass, selectedValue) {
-    const buttons = document.getElementsByClassName(containerClass);
+function updateButtonStates(containerId, selectedValue, prefix) {
+    const container = document.getElementById(containerId);
+    const buttons = container.getElementsByClassName('button');
     Array.from(buttons).forEach(button => {
         button.classList.toggle('selected', 
-            button.textContent.includes(selectedValue.toString()));
+            button.textContent === `${prefix} ${selectedValue + 1}`);
     });
 }
 
@@ -227,6 +232,11 @@ function checkAnswer(event) {
     const question = getCurrentQuestion();
     if (!question) return;
     
+    if (question.uniqueVariant && selectedVariant === null) {
+        alert('Please select a variant');
+        return;
+    }
+    
     const inputs = document.querySelectorAll('#inputFields input');
     const values = Array.from(inputs).map(input => parseFloat(input.value));
     
@@ -236,11 +246,11 @@ function checkAnswer(event) {
         return;
     }
     
-    const answersToCheck = question.uniqueVariant 
-        ? [question.fieldAnswers[selectedVariant]]
-        : question.fieldAnswers;
+    // Get the correct answers based on variant
+    const startIndex = question.uniqueVariant ? selectedVariant * question.fieldNumber : 0;
+    const relevantAnswers = question.fieldAnswers.slice(startIndex, startIndex + question.fieldNumber);
     
-    const isCorrect = checkValues(values, answersToCheck);
+    const isCorrect = checkValues(values, relevantAnswers);
     showResult(isCorrect);
 }
 
@@ -291,21 +301,6 @@ function resetInputFields() {
     questionText.textContent = '';
 }
 
-// Reset all UI state
-function resetUI() {
-    selectedWeek = null;
-    selectedTask = null;
-    selectedVariant = null;
-    
-    document.querySelectorAll('.button').forEach(button => {
-        button.classList.remove('selected');
-    });
-    
-    document.getElementById('variantSection').style.display = 'none';
-    resetInputFields();
-    clearResults();
-}
-
 // Protect against console inspection
 (function() {
     const originalLog = console.log;
@@ -327,11 +322,6 @@ document.addEventListener('contextmenu', (e) => e.preventDefault());
 // Make questions non-enumerable
 Object.defineProperties(window, {
     'questions': {
-        enumerable: false,
-        writable: false,
-        configurable: false
-    },
-    'encodedAnswers': {
         enumerable: false,
         writable: false,
         configurable: false
