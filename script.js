@@ -1,9 +1,6 @@
 // Question data structure
 const questions = [];
 
-// Encoded answer values (will be populated from CSV)
-const encodedAnswers = [];
-
 // Track selected options
 let selectedWeek = null;
 let selectedTask = null;
@@ -18,12 +15,24 @@ document.addEventListener('DOMContentLoaded', () => {
 // Load and parse CSV data
 async function loadQuestionData() {
     try {
-        const response = await fetch('course-questions.csv');
+        // Using relative path for GitHub Pages
+        const response = await fetch('/course-questions.csv');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const csvText = await response.text();
         parseCSVData(csvText);
         initializeWeekButtons();
     } catch (error) {
         console.error('Error loading question data:', error);
+        // Show user-friendly error message
+        document.getElementById('result').innerHTML = `
+            <div class="incorrect">
+                <h3>Loading Error</h3>
+                <p>Unable to load questions. Please try refreshing the page.</p>
+            </div>
+        `;
+        document.getElementById('result').style.display = 'block';
     }
 }
 
