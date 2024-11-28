@@ -4,50 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Score Checker</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="icon" href="checkicon.svg" type="image/svg+xml">
+    <link href="styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <h1>SCORE CHECKER</h1>
-    
-        <form>
-            <div class="form-group">
-                <label>SELECT TASK</label>
-                <div class="task-buttons">
-                    <button type="button">task 1</button>
-                    <button type="button">task 2</button>
-                    <button type="button">task 3</button>
-                    <button type="button">task 4</button>
-                </div>
-            </div>
-    
-            <div class="form-group">
-                <label>SELECT GROUP</label>
-                <div class="group-buttons">
-                    <button type="button">group 1</button>
-                    <button type="button">group 2</button>
-                    <button type="button">group 3</button>
-                    <button type="button">group 4</button>
-                    <button type="button">group 5</button>
-                    <button type="button">group 6</button>
-                    <button type="button">group 7</button>
-                    <button type="button">group 8</button>
-                </div>
-            </div>
-    
-            <div class="form-group">
-                <label>CALCULATED VALUE</label>
-                <input type="number" id="score" class="default-input" step="0.0001">
-            </div>
-    
-            <button type="submit" class="submit-button">CHECK ANSWER</button>
-    
-            <div id="result"></div>
-        </form>
-    </div>
 
+        <div class="form-group">
+            <label>SELECT WEEK</label>
+            <div class="week-buttons" id="weekButtons">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>SELECT TASK</label>
+            <div class="task-buttons" id="taskButtons">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <div class="form-group" id="variantSection" style="display: none;">
+            <label>SELECT VARIANT</label>
+            <div class="variant-buttons" id="variantButtons">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div id="questionText" class="question-text">
+                <!-- Dynamically populated -->
+            </div>
+            <div id="inputFields" class="input-fields">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <button class="submit-button" id="checkButton">CHECK ANSWER</button>
+
+        <div id="result"></div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>

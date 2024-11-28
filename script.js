@@ -1,160 +1,300 @@
-// Encoded answer values
-const _0xf4e9 = [
-    ['MTQyLjM1', 'NTExLjA=', 'MjYxLjM0', 'NjU3LjA=', 'MTQyLjM1', 'OTEyLjU=', 'MzI4LjU=', 'Mjc5LjU5'], // Task 1
-    ['NjQzLjg2', 'NTUxLjg4', 'NjY3LjIy', 'NTEwLjI3', 'NjI5Ljk5', 'NTgyLjU0', 'NjgyLjU1', 'NTkyLjc2'], // Task 2
-    ['NjU3Ljcz', 'NTc1Ljk3', 'NjkxLjMx', 'NTM1LjgyJA==', 'NjU0LjA4', 'NjAwLjc5', 'Njk5LjM0', 'NjE2Ljg1'], // Task 3
-    ['Njc3LjQ0', 'NjA4LjgyJA==', 'NzAyLjI2', 'NTY3Ljk0', 'NjcwLjg3', 'NjI1LjYx', 'NzEwLjI5', 'NjQwLjk0'] // Task 4
-];
+// Question data structure
+const questions = [];
+
+// Encoded answer values (will be populated from CSV)
+const encodedAnswers = [];
 
 // Track selected options
-let selectedGroup = null;
+let selectedWeek = null;
 let selectedTask = null;
+let selectedVariant = null;
 
-// Initialize UI elements
+// Initialize after DOM loads
 document.addEventListener('DOMContentLoaded', () => {
-    initializeButtons();
-    document.querySelector('form').addEventListener('submit', checkScore);
-    
-    const scoreInput = document.getElementById('score');
-    
-    // Reset on any interaction
-    ['input', 'focus', 'click', 'mousedown', 'touchstart'].forEach(event => {
-        scoreInput.addEventListener(event, resetInputToDefault);
-    });
-    
-    // Also reset when selecting new task/group
-    document.querySelectorAll('.task-button, .group-button').forEach(button => {
-        button.addEventListener('click', resetInputToDefault);
-    });
+    loadQuestionData();
+    initializeEventListeners();
 });
 
-// Reset input styles
-function resetInputToDefault() {
-    const scoreInput = document.getElementById('score');
-    const resultDiv = document.getElementById('result');
-    scoreInput.classList.remove('valid-input', 'invalid-input');
-    scoreInput.classList.add('default-input');
-    resultDiv.style.display = 'none';
+// Load and parse CSV data
+async function loadQuestionData() {
+    try {
+        const response = await fetch('course-questions.csv');
+        const csvText = await response.text();
+        parseCSVData(csvText);
+        initializeWeekButtons();
+    } catch (error) {
+        console.error('Error loading question data:', error);
+    }
 }
 
-// Initialize task and group buttons
-function initializeButtons() {
-    // Task buttons
-    const taskButtons = document.querySelectorAll('.task-buttons button');
-    taskButtons.forEach((button, index) => {
-        button.classList.add('task-button');
-        button.addEventListener('click', () => selectTask(index + 1));
-    });
+// Parse CSV data and populate questions array
+function parseCSVData(csvText) {
+    const lines = csvText.split('\n');
+    const headers = lines[0].split(',');
+    
+    for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        
+        const values = lines[i].split(',');
+        const question = {
+            week: parseInt(values[0]),
+            task: parseInt(values[1]),
+            tags: values[2] ? values[2].split(';') : [],
+            uniqueVariant: values[3].toLowerCase() === 'yes',
+            question: values[4],
+            fieldAnswers: values[5].split(';'),
+            fieldNumber: parseInt(values[6]),
+            fieldNames: values[7].split(';')
+        };
+        questions.push(question);
+    }
+}
 
-    // Group buttons
-    const groupButtons = document.querySelectorAll('.group-buttons button');
-    groupButtons.forEach((button, index) => {
-        button.classList.add('group-button');
-        button.addEventListener('click', () => selectGroup(index + 1));
+// Initialize event listeners
+function initializeEventListeners() {
+    document.getElementById('checkButton').addEventListener('click', checkAnswer);
+}
+
+// Initialize week buttons
+function initializeWeekButtons() {
+    const weeks = [...new Set(questions.map(q => q.week))];
+    const container = document.getElementById('weekButtons');
+    container.innerHTML = '';
+    
+    weeks.forEach(week => {
+        const button = createButton(`Week ${week}`, () => selectWeek(week));
+        container.appendChild(button);
     });
 }
 
-// Task selection handler
-function selectTask(taskNum) {
-    document.querySelectorAll('.task-button').forEach((button) => {
-        button.classList.remove('selected');
-    });
-
-    const selectedButton = document.querySelector(`.task-button:nth-child(${taskNum})`);
-    selectedButton.classList.add('selected');
-
-    selectedTask = taskNum;
-    // Reset group selection when task changes
-    selectedGroup = null;
-    document.querySelectorAll('.group-button').forEach((button) => {
-        button.classList.remove('selected');
+// Initialize task buttons for selected week
+function initializeTaskButtons(week) {
+    const weekQuestions = questions.filter(q => q.week === week);
+    const container = document.getElementById('taskButtons');
+    container.innerHTML = '';
+    
+    weekQuestions.forEach(q => {
+        const button = createButton(`Task ${q.task}`, () => selectTask(q.task));
+        if (q.tags.includes('bonus')) {
+            const badge = document.createElement('span');
+            badge.className = 'bonus-badge';
+            badge.textContent = 'bonus';
+            button.appendChild(badge);
+        }
+        container.appendChild(button);
     });
 }
 
-// Group selection handler
-function selectGroup(groupNum) {
-    if (!selectedTask) {
-        alert('Please select a task first');
+// Initialize variant buttons if needed
+function initializeVariantButtons(question) {
+    const container = document.getElementById('variantButtons');
+    const section = document.getElementById('variantSection');
+    
+    if (!question.uniqueVariant) {
+        section.style.display = 'none';
         return;
     }
-
-    document.querySelectorAll('.group-button').forEach((button) => {
-        button.classList.remove('selected');
-    });
-
-    const selectedButton = document.querySelector(`.group-button:nth-child(${groupNum})`);
-    selectedButton.classList.add('selected');
-
-    selectedGroup = groupNum;
+    
+    section.style.display = 'block';
+    container.innerHTML = '';
+    
+    const variantCount = question.fieldAnswers.length;
+    for (let i = 0; i < variantCount; i++) {
+        const button = createButton(`Variant ${i + 1}`, () => selectVariant(i));
+        container.appendChild(button);
+    }
 }
 
-// Score checking function
-function checkScore(event) {
+// Create button helper function
+function createButton(text, onClick) {
+    const button = document.createElement('button');
+    button.className = 'button';
+    button.textContent = text;
+    button.addEventListener('click', onClick);
+    return button;
+}
+
+// Selection handlers
+function selectWeek(week) {
+    selectedWeek = week;
+    selectedTask = null;
+    selectedVariant = null;
+    
+    // Update UI
+    updateButtonStates('week-buttons', week);
+    initializeTaskButtons(week);
+    clearResults();
+    resetInputFields();
+}
+
+function selectTask(task) {
+    selectedTask = task;
+    selectedVariant = null;
+    
+    // Update UI
+    updateButtonStates('task-buttons', task);
+    const question = getCurrentQuestion();
+    if (question) {
+        initializeVariantButtons(question);
+        if (!question.uniqueVariant) {
+            setupInputFields(question);
+        }
+    }
+    clearResults();
+}
+
+function selectVariant(variant) {
+    selectedVariant = variant;
+    
+    // Update UI
+    updateButtonStates('variant-buttons', variant);
+    const question = getCurrentQuestion();
+    if (question) {
+        setupInputFields(question);
+    }
+    clearResults();
+}
+
+// Get current question helper
+function getCurrentQuestion() {
+    return questions.find(q => 
+        q.week === selectedWeek && 
+        q.task === selectedTask
+    );
+}
+
+// Setup input fields based on question
+function setupInputFields(question) {
+    const container = document.getElementById('inputFields');
+    const questionText = document.getElementById('questionText');
+    
+    // Set question text
+    questionText.textContent = question.question;
+    
+    // Create input fields
+    container.innerHTML = '';
+    for (let i = 0; i < question.fieldNumber; i++) {
+        const group = document.createElement('div');
+        group.className = 'input-group';
+        
+        const label = document.createElement('label');
+        label.className = 'input-label';
+        label.textContent = question.fieldNames[Math.min(i, question.fieldNames.length - 1)];
+        
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.step = 'any';
+        input.required = true;
+        
+        group.appendChild(label);
+        group.appendChild(input);
+        container.appendChild(group);
+    }
+}
+
+// Update button states helper
+function updateButtonStates(containerClass, selectedValue) {
+    const buttons = document.getElementsByClassName(containerClass);
+    Array.from(buttons).forEach(button => {
+        button.classList.toggle('selected', 
+            button.textContent.includes(selectedValue.toString()));
+    });
+}
+
+// Check answer
+function checkAnswer(event) {
     event.preventDefault();
-
-    if (!selectedTask || !selectedGroup) {
-        alert('Please select both task and group');
+    
+    const question = getCurrentQuestion();
+    if (!question) return;
+    
+    const inputs = document.querySelectorAll('#inputFields input');
+    const values = Array.from(inputs).map(input => parseFloat(input.value));
+    
+    // Validate all inputs are filled
+    if (values.some(isNaN)) {
+        alert('Please fill all fields with valid numbers');
         return;
     }
+    
+    const answersToCheck = question.uniqueVariant 
+        ? [question.fieldAnswers[selectedVariant]]
+        : question.fieldAnswers;
+    
+    const isCorrect = checkValues(values, answersToCheck);
+    showResult(isCorrect);
+}
 
-    const scoreInput = document.getElementById('score');
+// Check values against answers
+function checkValues(values, answers) {
+    if (values.length !== answers.length) return false;
+    
+    const margin = 0.01; // 1% tolerance
+    
+    return values.every((value, index) => {
+        const expected = parseFloat(answers[index]);
+        const percentDiff = Math.abs((value - expected) / expected) * 100;
+        return percentDiff <= margin;
+    });
+}
+
+// Show result message
+function showResult(isCorrect) {
     const resultDiv = document.getElementById('result');
-    const userScore = parseFloat(scoreInput.value);
-    
-    if (isNaN(userScore)) {
-        alert('Please enter a valid score');
-        return;
-    }
-
-    // Decode and compare
-    const encodedCorrect = _0xf4e9[selectedTask - 1][selectedGroup - 1];
-    const correctScore = Number(atob(encodedCorrect)) / 7.3;
-    
-    const margin = 0.01;
-    const percentDiff = Math.abs((userScore - correctScore) / correctScore) * 100;
-    const isCorrect = percentDiff <= margin;
-    
-    // Remove existing validation classes
-    scoreInput.classList.remove('valid-input', 'invalid-input', 'default-input');
+    resultDiv.style.display = 'block';
+    resultDiv.className = isCorrect ? 'correct' : 'incorrect';
     
     if (isCorrect) {
-        scoreInput.classList.add('valid-input');
-        resultDiv.className = 'correct';
         resultDiv.innerHTML = `
             <h3>Correct! ✅</h3>
             <p>Your calculation is correct</p>
         `;
     } else {
-        scoreInput.classList.add('invalid-input');
-        resultDiv.className = 'incorrect';
-        
-        let message;
-        if (percentDiff <= 5) {
-            message = "You're very close! Just a small adjustment needed in your calculations";
-        } else if (percentDiff <= 20) {
-            message = userScore > correctScore 
-                ? "Your answer is a bit high. Double-check your calculations"
-                : "Your answer is a bit low. Double-check your calculations";
-        } else {
-            message = "That's quite different from the expected result. Consider reviewing your approach - are you using the right formula?";
-        }
-        
         resultDiv.innerHTML = `
             <h3>Not quite right ❌</h3>
-            <p>${message}</p>
+            <p>Please check your calculations and try again</p>
         `;
     }
-    resultDiv.style.display = 'block';
 }
 
-// Prevent console inspection
+// Clear results
+function clearResults() {
+    const resultDiv = document.getElementById('result');
+    resultDiv.style.display = 'none';
+    resultDiv.innerHTML = '';
+}
+
+// Reset input fields
+function resetInputFields() {
+    const container = document.getElementById('inputFields');
+    container.innerHTML = '';
+    const questionText = document.getElementById('questionText');
+    questionText.textContent = '';
+}
+
+// Reset all UI state
+function resetUI() {
+    selectedWeek = null;
+    selectedTask = null;
+    selectedVariant = null;
+    
+    document.querySelectorAll('.button').forEach(button => {
+        button.classList.remove('selected');
+    });
+    
+    document.getElementById('variantSection').style.display = 'none';
+    resetInputFields();
+    clearResults();
+}
+
+// Protect against console inspection
 (function() {
     const originalLog = console.log;
     console.log = function(...args) {
         if (args.some(arg => 
-            arg === _0xf4e9 || 
-            (typeof arg === 'string' && arg.includes('btoa')) || 
-            (typeof arg === 'string' && arg.includes('atob'))
+            arg === questions || 
+            arg === encodedAnswers ||
+            (typeof arg === 'string' && arg.includes('fieldAnswers'))
         )) {
             return;
         }
@@ -162,12 +302,19 @@ function checkScore(event) {
     };
 })();
 
-// Additional protection against direct variable access
-Object.defineProperty(window, '_0xf4e9', {
-    enumerable: false,
-    configurable: false,
-    writable: false
-});
-
 // Disable right-click to make inspection slightly harder
 document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+// Make questions non-enumerable
+Object.defineProperties(window, {
+    'questions': {
+        enumerable: false,
+        writable: false,
+        configurable: false
+    },
+    'encodedAnswers': {
+        enumerable: false,
+        writable: false,
+        configurable: false
+    }
+});
