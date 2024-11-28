@@ -16,22 +16,27 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             alert('Failed to load data. Please try again later.');
         });
 
-        function parseCSV(text) {
-            const lines = text.trim().split('\n');
-            const headers = lines[0].split(',');
-            const data = lines.slice(1).map(line => {
-                const values = line.split(',');
-                const entry = {};
-                headers.forEach((header, index) => {
-                    entry[header.trim()] = values[index] ? values[index].trim() : '';
-                });
-                // Parse week and task as numbers
-                entry.week = parseInt(entry.week, 10);
-                entry.task = parseInt(entry.task, 10);
-                return entry;
+    // Parse CSV text into an array of objects
+    function parseCSV(text) {
+        const lines = text.trim().split('\n');
+        const headers = lines[0].split(','); // Changed delimiter to comma
+        const data = lines.slice(1).map(line => {
+            const values = line.split(',');
+            if (values.length !== headers.length) {
+                console.warn('Skipping line due to mismatched columns:', line);
+                return null;
+            }
+            const entry = {};
+            headers.forEach((header, index) => {
+                entry[header.trim()] = values[index] ? values[index].trim() : '';
             });
-            return data;
-        }
+            // Parse week and task as numbers
+            entry.week = parseInt(entry.week, 10);
+            entry.task = parseInt(entry.task, 10);
+            return entry;
+        }).filter(entry => entry !== null); // Remove null entries
+        return data;
+    }
 
     // Main application initialization
     function initializeApp(data) {
@@ -112,8 +117,12 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             // Get question data
             const questions = data.filter(item => item.week === currentWeek && item.task === task);
             currentQuestion = questions[0];
+            if (!currentQuestion) {
+                console.error(`No question found for week ${currentWeek}, task ${task}`);
+                return;
+            }
             // Check for variants
-            if (currentQuestion && currentQuestion['unique-variant'] === 'yes') {
+            if (currentQuestion['unique-variant'] === 'yes') {
                 renderVariants(currentQuestion);
             } else {
                 renderQuestion(currentQuestion);
@@ -180,7 +189,9 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             // Retrieve correct answers
             let correctAnswers = currentQuestion['field-answers'].split(',').map(Number);
             if (currentQuestion['unique-variant'] === 'yes') {
-                correctAnswers = [correctAnswers[currentVariant]];
+                const variantIndex = currentVariant;
+                const variantAnswer = correctAnswers[variantIndex];
+                correctAnswers = [variantAnswer];
             }
             // Compare answers with 1% tolerance
             let allCorrect = true;
