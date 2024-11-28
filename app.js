@@ -8,6 +8,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
         .then(response => response.text())
         .then(text => {
             const parsedData = parseCSV(text);
+            console.log('Parsed Data:', parsedData); // Debug log
             initializeApp(parsedData);
         })
         .catch(error => {
@@ -18,15 +19,22 @@ document.addEventListener('contextmenu', event => event.preventDefault());
     // Parse CSV text into an array of objects
     function parseCSV(text) {
         const lines = text.trim().split('\n');
-        const headers = lines[0].split('\t');
+        const headers = lines[0].split('\t'); // Adjust delimiter if necessary
         const data = lines.slice(1).map(line => {
-            const values = line.split('\t');
+            const values = line.split('\t'); // Adjust delimiter if necessary
+            if (values.length !== headers.length) {
+                console.warn('Skipping line due to mismatched columns:', line);
+                return null;
+            }
             const entry = {};
             headers.forEach((header, index) => {
                 entry[header.trim()] = values[index] ? values[index].trim() : '';
             });
+            // Parse week and task as numbers
+            entry.week = parseInt(entry.week, 10);
+            entry.task = parseInt(entry.task, 10);
             return entry;
-        });
+        }).filter(entry => entry !== null); // Remove null entries
         return data;
     }
 
@@ -79,6 +87,10 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             const uniqueTasks = [...new Set(tasks)];
             uniqueTasks.forEach(task => {
                 const taskData = data.find(item => item.week === week && item.task === task);
+                if (!taskData) {
+                    console.error(`No task data found for week ${week}, task ${task}`);
+                    return;
+                }
                 const button = document.createElement('button');
                 button.textContent = `Task ${task}`;
                 button.className = 'task-button';
