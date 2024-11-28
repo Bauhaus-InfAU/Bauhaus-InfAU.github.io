@@ -180,20 +180,30 @@ function setupInputFields(question) {
     // Set question text
     questionText.textContent = question.question;
     
-    // Create input fields
+    // Clear previous inputs
     container.innerHTML = '';
+    
+    // Get answers for selected variant if applicable
+    const relevantAnswers = question.uniqueVariant && selectedVariant !== null
+        ? [question.fieldAnswers[selectedVariant]]
+        : question.fieldAnswers;
+    
+    // Create the correct number of input fields based on fieldNumber
     for (let i = 0; i < question.fieldNumber; i++) {
         const group = document.createElement('div');
         group.className = 'input-group';
         
         const label = document.createElement('label');
         label.className = 'input-label';
-        label.textContent = question.fieldNames[Math.min(i, question.fieldNames.length - 1)];
+        // Use the field name if available, otherwise use a default
+        const fieldName = question.fieldNames[Math.min(i, question.fieldNames.length - 1)];
+        label.textContent = fieldName || `Value ${i + 1}`;
         
         const input = document.createElement('input');
         input.type = 'number';
         input.step = 'any';
         input.required = true;
+        input.className = 'score-input';
         
         group.appendChild(label);
         group.appendChild(input);

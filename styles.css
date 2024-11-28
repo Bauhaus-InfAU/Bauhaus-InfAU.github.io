@@ -135,14 +135,42 @@ label {
 }
 
 .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    margin-bottom: 15px;
 }
 
 .input-label {
-    font-size: 14px;
+    display: block;
     color: var(--primary-text);
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.score-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--input-border);
+    border-radius: 48px;
+    box-sizing: border-box;
+    font-size: 24px;
+    font-family: var(--font-main);
+    text-align: center;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.score-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(62, 71, 177, 0.1);
+}
+
+.score-input::-webkit-outer-spin-button,
+.score-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 input[type="number"] {
