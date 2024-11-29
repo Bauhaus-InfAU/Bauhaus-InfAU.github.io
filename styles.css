@@ -151,17 +151,19 @@ input[type="number"] {
     border: 2px solid var(--input-border);
     border-radius: 48px;
     box-sizing: border-box;
-    font-size: 24px;
+    font-size: 56px;
     font-family: var(--font-main);
     text-align: center;
     -webkit-appearance: none;
     -moz-appearance: textfield;
     appearance: textfield;
+    background-color: white;
+    color: var(--primary-text);
+    transition: all 0.3s ease;
 }
 
 input[type="number"]:focus {
-    outline: none;
-    border-color: var(--primary-color);
+    outline-color: var(--accent);
 }
 
 .submit-button {
@@ -175,11 +177,15 @@ input[type="number"]:focus {
     width: 100%;
     font-family: var(--font-main);
     font-weight: 400;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
+    transform: translate(0, 0);
 }
 
 .submit-button:hover {
     background-color: var(--primary-hover);
+    box-shadow: 0 2px 18px rgba(0,0,0,0.1);
+    transform: translate(0, -3px);
 }
 
 #result {

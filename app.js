@@ -104,9 +104,8 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 button.className = 'task-button';
                 if (taskData.tags && taskData.tags.includes('bonus')) {
                     const badge = document.createElement('span');
-                    badge.textContent = 'Bonus';
-                    badge.style.marginLeft = '5px';
-                    badge.style.color = 'red';
+                    badge.className = 'bonus-badge';
+                    badge.textContent = 'bonus';
                     button.appendChild(badge);
                 }
                 button.onclick = () => selectTask(task);
