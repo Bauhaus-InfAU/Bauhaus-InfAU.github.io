@@ -177,6 +177,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
         function renderQuestion(question) {
             if (question && question.question) {
                 questionContainer.textContent = question.question;
+                questionContainer.className = 'question-text';  // Make sure the question has the correct class
             } else {
                 questionContainer.textContent = 'Question not available.';
                 return;
@@ -191,12 +192,12 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 input.type = 'number';
                 input.step = 'any';
                 input.className = 'default-input';
+                input.placeholder = fieldNames[i] || `Input ${i + 1}`; // Add placeholder text
                 inputFieldsContainer.appendChild(label);
                 inputFieldsContainer.appendChild(input);
             }
             checkAnswerButton.style.display = 'block';
             resultContainer.style.display = 'none';
-            // Clear previous inputs
             checkAnswerButton.disabled = false;
             clearInputs();
         }
