@@ -228,7 +228,6 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             
             const fieldNumber = question['unique-variant'] === 'yes' ? 1 : parseInt(question['field-number'], 10);
             const fieldNames = splitPreservingCommas(question['field-names']);
-            const defaultFieldName = fieldNames[0] || 'Input';
             
             // Clear and set proper class on the container
             inputFieldsContainer.innerHTML = '';
@@ -242,7 +241,14 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 input.type = 'number';
                 input.step = 'any';
                 input.className = 'default-input';
-                input.placeholder = defaultFieldName;
+                
+                // If there's only one field name, use it for all inputs
+                // If there are multiple field names, use the corresponding one for each input
+                if (fieldNames.length === 1) {
+                    input.placeholder = fieldNames[0];
+                } else {
+                    input.placeholder = fieldNames[i] || 'Input';
+                }
                 
                 inputGroup.appendChild(input);
                 inputFieldsContainer.appendChild(inputGroup);
@@ -320,7 +326,8 @@ document.addEventListener('contextmenu', event => event.preventDefault());
         function highlightSelectedButton(container, text) {
             const buttons = container.querySelectorAll('button');
             buttons.forEach(button => {
-                if (button.textContent.includes(text)) {
+                const buttonText = button.childNodes[0].textContent.trim();
+                if (buttonText === text) {
                     button.classList.add('selected');
                 } else {
                     button.classList.remove('selected');
@@ -344,7 +351,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 
         // Function to split fields while preserving commas inside quotes
         function splitPreservingCommas(str) {
-            // Remove any surrounding quotes and split on forward slashes
+            if (!str) return ['Input'];
             return str.split('/').map(s => s.trim());
         }
     }
