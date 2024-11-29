@@ -3,7 +3,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 
 // Immediately Invoked Function Expression to avoid global scope pollution
 (() => {
-    // Fetch and parse CSV data using PapaParse
+    // Fetch and parse CSV data
     fetch('course-questions.csv')
         .then(response => response.text())
         .then(text => {
@@ -16,33 +16,25 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             alert('Failed to load data. Please try again later.');
         });
 
-    // Parse CSV text into an array of objects using PapaParse
+    // Parse CSV text into an array of objects
     function parseCSV(text) {
-        const results = Papa.parse(text, {
-            header: true,
-            skipEmptyLines: true,
-            dynamicTyping: true,
-            trimHeaders: true,
-        });
-
-        if (results.errors.length) {
-            console.error('CSV Parsing Errors:', results.errors);
-        }
-
-        const data = results.data.map(entry => {
-            // Ensure that all expected fields are present
-            return {
-                week: entry.week,
-                task: entry.task,
-                tags: entry.tags || '',
-                'unique-variant': entry['unique-variant'] || 'no',
-                question: entry.question || '',
-                'field-answers': entry['field-answers'] || '',
-                'field-number': entry['field-number'] || 1,
-                'field-names': entry['field-names'] || '',
-            };
-        });
-
+        const lines = text.trim().split('\n');
+        const headers = lines[0].split('\t');
+        const data = lines.slice(1).map(line => {
+            const values = line.split('\t');
+            if (values.length !== headers.length) {
+                console.warn('Skipping line due to mismatched columns:', line);
+                return null;
+            }
+            const entry = {};
+            headers.forEach((header, index) => {
+                entry[header.trim()] = values[index] ? values[index].trim() : '';
+            });
+            // Parse week and task as numbers
+            entry.week = parseInt(entry.week, 10);
+            entry.task = parseInt(entry.task, 10);
+            return entry;
+        }).filter(entry => entry !== null); // Remove null entries
         return data;
     }
 
@@ -139,7 +131,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 
         // Render variant selection if applicable
         function renderVariants(question) {
-            const answers = question['field-answers'].split(',');
+            const answers = question['field-answers'].split('/');
             const numVariants = answers.length;
             variantSelection.innerHTML = '';
             for (let i = 0; i < numVariants; i++) {
@@ -167,7 +159,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 return;
             }
             const fieldNumber = parseInt(question['field-number'], 10);
-            const fieldNames = splitPreservingCommas(question['field-names']);
+            const fieldNames = question['field-names'].split('/').map(name => name.trim());
             inputFieldsContainer.innerHTML = '';
             for (let i = 0; i < fieldNumber; i++) {
                 const label = document.createElement('label');
@@ -195,7 +187,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 return;
             }
             // Retrieve correct answers
-            let correctAnswers = splitPreservingCommas(currentQuestion['field-answers']).map(Number);
+            let correctAnswers = currentQuestion['field-answers'].split('/').map(Number);
             if (currentQuestion['unique-variant'] === 'yes') {
                 const variantIndex = currentVariant;
                 const variantAnswer = correctAnswers[variantIndex];
@@ -263,12 +255,6 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 input.className = 'default-input';
             });
             resultContainer.style.display = 'none';
-        }
-
-        // Function to split fields while preserving commas inside quotes
-        function splitPreservingCommas(str) {
-            // Remove any surrounding quotes and split on commas
-            return str.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(s => s.replace(/^"|"$/g, ''));
         }
     }
 })();
