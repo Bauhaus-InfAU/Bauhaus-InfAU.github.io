@@ -75,7 +75,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
         weeks.forEach(week => {
             const button = document.createElement('button');
             button.textContent = `Week ${week}`;
-            button.className = 'task-button';
+            button.className = 'button';
             button.onclick = () => selectWeek(week);
             weekSelection.appendChild(button);
         });
