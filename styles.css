@@ -133,6 +133,7 @@ label {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    margin: 20px 0;
 }
 
 .input-group {
@@ -161,6 +162,7 @@ input[type="number"] {
     background-color: white;
     color: var(--primary-text);
     transition: all 0.3s ease;
+    margin: 0;  /* Reset any default margins */
 }
 
 input[type="number"]::placeholder {
