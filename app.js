@@ -150,8 +150,9 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 
         // Render variant selection if applicable
         function renderVariants(question) {
-            const answers = splitPreservingCommas(question['field-answers']);
-            // For unique variants, each answer is a separate variant
+            // Split answers by forward slash and trim whitespace
+            const answers = question['field-answers'].split('/').map(answer => answer.trim());
+            // For unique variants, each answer should be its own variant
             const numVariants = answers.length;
             
             variantSelection.innerHTML = '';
@@ -168,12 +169,12 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             }
         }
 
-        // Variant selection handler
+        // Update the selectVariant function:
         function selectVariant(variantIndex) {
             currentVariant = variantIndex;
             highlightSelectedButton(variantSelection, `Variant ${variantIndex + 1}`);
             renderQuestion(currentQuestion);
-        }
+}
 
         // Render question and input fields
         function renderQuestion(question) {
@@ -214,13 +215,17 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 alert('Please fill in all input fields.');
                 return;
             }
-            // Retrieve correct answers
-            let correctAnswers = splitPreservingCommas(currentQuestion['field-answers']).map(Number);
+            // Split answers and get the correct one for the current variant
+            const allAnswers = currentQuestion['field-answers'].split('/').map(answer => parseFloat(answer.trim()));
+            let correctAnswers;
+            
             if (currentQuestion['unique-variant'] === 'yes') {
-                const variantIndex = currentVariant;
-                const variantAnswer = correctAnswers[variantIndex];
-                correctAnswers = [variantAnswer];
+                // For unique variants, use the answer corresponding to the selected variant
+                correctAnswers = [allAnswers[currentVariant]];
+            } else {
+                correctAnswers = allAnswers;
             }
+            
             // Compare answers with 1% tolerance
             let allCorrect = true;
             userAnswers.forEach((answer, index) => {
