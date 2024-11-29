@@ -132,8 +132,8 @@ label {
 .input-fields {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin: 20px 0;
+    gap: 20px;  /* Increased gap for more noticeable spacing */
+    padding: 20px 0;  /* Added padding for better spacing */
 }
 
 .input-group {

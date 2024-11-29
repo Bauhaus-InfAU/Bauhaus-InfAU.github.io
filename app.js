@@ -186,21 +186,28 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 return;
             }
             
-            // Always use field-number of 1 for unique variants since each answer is complete
             const fieldNumber = question['unique-variant'] === 'yes' ? 1 : parseInt(question['field-number'], 10);
-            
             const fieldNames = splitPreservingCommas(question['field-names']);
-            const defaultFieldName = fieldNames[0] || 'Input'; // Use first field name as default
+            const defaultFieldName = fieldNames[0] || 'Input';
             
+            // Clear and set proper class on the container
             inputFieldsContainer.innerHTML = '';
+            inputFieldsContainer.className = 'input-fields';  // Make sure this class is set
+            
             for (let i = 0; i < fieldNumber; i++) {
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'input-group';
+                
                 const input = document.createElement('input');
                 input.type = 'number';
                 input.step = 'any';
                 input.className = 'default-input';
                 input.placeholder = defaultFieldName;
-                inputFieldsContainer.appendChild(input);
+                
+                inputGroup.appendChild(input);
+                inputFieldsContainer.appendChild(inputGroup);
             }
+            
             checkAnswerButton.style.display = 'block';
             resultContainer.style.display = 'none';
             checkAnswerButton.disabled = false;
