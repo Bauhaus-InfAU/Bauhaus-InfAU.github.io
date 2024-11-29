@@ -146,7 +146,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             for (let i = 0; i < numVariants; i++) {
                 const button = document.createElement('button');
                 button.textContent = `Variant ${i + 1}`;
-                button.className = 'task-button';
+                button.className = 'button';
                 button.onclick = () => selectVariant(i);
                 variantSelection.appendChild(button);
             }
