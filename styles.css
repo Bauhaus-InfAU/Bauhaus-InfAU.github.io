@@ -113,7 +113,7 @@ label {
     top: -8px;
     right: -8px;
     background-color: #FFD700;
-    color: black;
+    color: var(--primary-text);
     font-size: 12px;
     padding: 2px 6px;
     border-radius: 10px;
@@ -121,11 +121,13 @@ label {
 }
 
 .question-text {
-    background-color: var(--bg-main);
+    background-color: #a9abd1;
+    color: var(--primary-text);
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
     font-size: 14px;
+    color: white;
 }
 
 .input-fields {
