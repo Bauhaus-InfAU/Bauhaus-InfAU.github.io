@@ -1,10 +1,10 @@
 week,task,tags,unique-variant,question,field-answers,field-number,field-names
-1,1,bonus,yes,Calculate accessibility for given location 12,"19.5,13,56,32,134,22,45,35",1,Value
-2,1,,no,Calculate accessibility for given location,"24,33,12",3,Percentage
-2,2,,no,Calculate accessibility for given location,"19.5,53,23,11",4,Percentage
-2,3,,no,Calculate accessibility for given location,"33,22,19.5",3,Percentage
-3,1,,no,Calculate accessibility for given location,19.5,1,Value
-3,2,,no,Calculate accessibility for given location,"132,19.5",2,Value
-3,2,bonus,no,Calculate accessibility for given location,"456,19.5",2,"Min, Mean"
-3,3,,no,Calculate accessibility for given location,"66,62,11,19.5",4,Value
-3,3,bonus,no,Calculate accessibility for given location,"123,19.5",2,"Min, Mean"
+1,1,bonus,yes,Calculate accessibility for given location 12,19.5/13/56/32/134/22/45/35,1,Value
+2,1,regular,no,Calculate accessibility for given location,24/33/12,3,Percentage
+2,2,regular,no,Calculate accessibility for given location,19.5/53/23/11,4,Percentage
+2,3,regular,no,Calculate accessibility for given location,33/22/19.5,3,Percentage
+3,1,regular,no,Calculate accessibility for given location,19.5,1,Value
+3,2,regular,no,Calculate accessibility for given location,132/19.5,2,Value
+3,2,bonus,no,Calculate accessibility for given location,456/19.5,2,Min/ Mean
+3,3,regular,no,Calculate accessibility for given location,66/62/11/19.5,4,Value
+3,3,bonus,no,Calculate accessibility for given location,123/19.5,2,Min/ Mean
