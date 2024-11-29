@@ -181,8 +181,10 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             if (question && question.question) {
                 questionContainer.textContent = question.question;
                 questionContainer.className = 'question-text';
+                questionContainer.style.display = 'block';
             } else {
                 questionContainer.textContent = 'Question not available.';
+                questionContainer.style.display = 'none';
                 return;
             }
             
@@ -256,6 +258,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             taskSelection.innerHTML = '';
             variantSelection.innerHTML = '';
             questionContainer.textContent = '';
+            questionContainer.style.display = 'none';
             inputFieldsContainer.innerHTML = '';
             checkAnswerButton.style.display = 'none';
             resultContainer.style.display = 'none';
@@ -269,6 +272,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
         function clearTaskUI() {
             variantSelection.innerHTML = '';
             questionContainer.textContent = '';
+            questionContainer.style.display = 'none';
             inputFieldsContainer.innerHTML = '';
             checkAnswerButton.style.display = 'none';
             resultContainer.style.display = 'none';
