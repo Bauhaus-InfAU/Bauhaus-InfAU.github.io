@@ -172,6 +172,24 @@ input[type="number"]:focus {
     outline-color: var(--accent);
 }
 
+input[type="number"].valid-input {
+    border-color: var(--correct-border);
+    background-color: var(--correct-bg);
+    color: var(--correct-text);
+}
+
+input[type="number"].invalid-input {
+    border-color: var(--incorrect-border);
+    background-color: var(--incorrect-bg);
+    color: var(--incorrect-text);
+}
+
+input[type="number"].default-input {
+    border-color: var(--input-border);
+    background-color: white;
+    color: var(--primary-text);
+}
+
 .submit-button {
     margin-top: 20px;
     background-color: var(--primary-color);

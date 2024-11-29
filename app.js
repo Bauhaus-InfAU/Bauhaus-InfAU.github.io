@@ -71,6 +71,12 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             configurable: false
         });
 
+        // Hide all labels initially
+        document.querySelectorAll('label').forEach(label => label.style.display = 'none');
+        
+        // Show week label since we always have weeks
+        document.querySelector('label[for="week-selection"]').style.display = 'block';
+
         // Render week selection buttons
         weeks.forEach(week => {
             const button = document.createElement('button');
@@ -113,6 +119,10 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 button.onclick = () => selectTask(task);
                 taskSelection.appendChild(button);
             });
+            // Show task label since we're displaying task buttons
+            document.querySelector('label[for="task-selection"]').style.display = 'block';
+            // Hide variant label until needed
+            document.querySelector('label[for="variant-selection"]').style.display = 'none';
         }
 
         // Task selection handler
@@ -143,6 +153,10 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             const answers = splitPreservingCommas(question['field-answers']);
             const numVariants = answers.length;
             variantSelection.innerHTML = '';
+            
+            // Show variant label since we're displaying variant buttons
+            document.querySelector('label[for="variant-selection"]').style.display = 'block';
+            
             for (let i = 0; i < numVariants; i++) {
                 const button = document.createElement('button');
                 button.textContent = `Variant ${i + 1}`;
@@ -230,6 +244,9 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             resultContainer.style.display = 'none';
             clearSelection(taskSelection);
             clearSelection(variantSelection);
+            // Hide task and variant labels
+            document.querySelector('label[for="task-selection"]').style.display = 'none';
+            document.querySelector('label[for="variant-selection"]').style.display = 'none';
         }
 
         function clearTaskUI() {
