@@ -170,7 +170,7 @@ input[type="number"]::placeholder {
 }
 
 input[type="number"]:hover::placeholder {
-    opacity: 0.5;
+    opacity: 0;
 }
 
 input[type="number"]:focus::placeholder {

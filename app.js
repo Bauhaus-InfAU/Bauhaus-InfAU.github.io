@@ -151,7 +151,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
         // Render variant selection if applicable
         function renderVariants(question) {
             const answers = splitPreservingCommas(question['field-answers']);
-            const numVariants = answers.length;
+            const numVariants = answers.length / question['field-number'];
             variantSelection.innerHTML = '';
             
             // Show variant label since we're displaying variant buttons
@@ -188,14 +188,11 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             
             inputFieldsContainer.innerHTML = '';
             for (let i = 0; i < fieldNumber; i++) {
-                const label = document.createElement('label');
-                label.textContent = defaultFieldName;
                 const input = document.createElement('input');
                 input.type = 'number';
                 input.step = 'any';
                 input.className = 'default-input';
                 input.placeholder = defaultFieldName;
-                inputFieldsContainer.appendChild(label);
                 inputFieldsContainer.appendChild(input);
             }
             checkAnswerButton.style.display = 'block';
