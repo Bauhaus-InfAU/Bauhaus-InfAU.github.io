@@ -86,7 +86,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             weekSelection.appendChild(button);
         });
 
-        // Week selection handler
+        // Week selection handler with updated task generation logic
         function selectWeek(week) {
             currentWeek = week;
             currentTask = null;
@@ -97,49 +97,88 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             highlightSelectedButton(weekSelection, `Week ${week}`);
             // Clear previous task buttons
             taskSelection.innerHTML = '';
-            // Render tasks for the selected week
-            const tasks = data.filter(item => item.week === week)
-                              .map(item => item.task);
-            const uniqueTasks = [...new Set(tasks)].sort((a, b) => a - b); // Sort tasks numerically
-            uniqueTasks.forEach(task => {
-                const taskData = data.find(item => item.week === week && item.task === task);
-                if (!taskData) {
-                    console.error(`No task data found for week ${week}, task ${task}`);
-                    return;
+            
+            // Get all tasks for the selected week
+            const weekTasks = data.filter(item => item.week === week);
+            
+            // Create a map to store task buttons with their bonus status
+            const taskButtons = new Map();
+            
+            weekTasks.forEach(taskData => {
+                const taskNum = taskData.task;
+                const isBonus = taskData.tags && taskData.tags.includes('bonus');
+                const buttonKey = isBonus ? `${taskNum}-bonus` : `${taskNum}`;
+                
+                // Create button if it doesn't exist
+                if (!taskButtons.has(buttonKey)) {
+                    const button = document.createElement('button');
+                    button.className = 'button';
+                    
+                    if (isBonus) {
+                        button.textContent = `Task ${taskNum}`;
+                        const badge = document.createElement('span');
+                        badge.className = 'bonus-badge';
+                        badge.textContent = 'bonus';
+                        button.appendChild(badge);
+                    } else {
+                        button.textContent = `Task ${taskNum}`;
+                    }
+                    
+                    // Store both the button and the task data
+                    taskButtons.set(buttonKey, {
+                        button,
+                        taskData,
+                        isBonus
+                    });
                 }
-                const button = document.createElement('button');
-                button.textContent = `Task ${task}`;
-                button.className = 'button'; // Match CSS class from styles.css
-                if (taskData.tags && taskData.tags.includes('bonus')) {
-                    const badge = document.createElement('span');
-                    badge.className = 'bonus-badge';
-                    badge.textContent = 'bonus';
-                    button.appendChild(badge);
-                }
-                button.onclick = () => selectTask(task);
-                taskSelection.appendChild(button);
             });
+            
+            // Sort and append buttons
+            Array.from(taskButtons.entries())
+                .sort(([keyA], [keyB]) => {
+                    const taskA = parseInt(keyA.split('-')[0]);
+                    const taskB = parseInt(keyB.split('-')[0]);
+                    if (taskA === taskB) {
+                        // If task numbers are equal, non-bonus comes before bonus
+                        return keyA.includes('bonus') ? 1 : -1;
+                    }
+                    return taskA - taskB;
+                })
+                .forEach(([_, {button, taskData, isBonus}]) => {
+                    button.onclick = () => selectTask(taskData.task, isBonus);
+                    taskSelection.appendChild(button);
+                });
+            
             // Show task label since we're displaying task buttons
             document.querySelector('label[for="task-selection"]').style.display = 'block';
             // Hide variant label until needed
             document.querySelector('label[for="variant-selection"]').style.display = 'none';
         }
 
-        // Task selection handler
-        function selectTask(task) {
+        // Updated task selection handler
+        function selectTask(task, isBonus) {
             currentTask = task;
             currentVariant = null;
             currentQuestion = null;
             clearTaskUI();
+            
             // Highlight selected task
-            highlightSelectedButton(taskSelection, `Task ${task}`);
-            // Get question data
-            const questions = data.filter(item => item.week === currentWeek && item.task === task);
+            const taskText = `Task ${task}`;
+            highlightSelectedButton(taskSelection, taskText);
+            
+            // Get question data matching both task number and bonus status
+            const questions = data.filter(item => 
+                item.week === currentWeek && 
+                item.task === task && 
+                Boolean(item.tags && item.tags.includes('bonus')) === isBonus
+            );
+            
             currentQuestion = questions[0];
             if (!currentQuestion) {
-                console.error(`No question found for week ${currentWeek}, task ${task}`);
+                console.error(`No question found for week ${currentWeek}, task ${task}, bonus: ${isBonus}`);
                 return;
             }
+            
             // Check for variants
             if (currentQuestion['unique-variant'] === 'yes') {
                 renderVariants(currentQuestion);
@@ -169,12 +208,11 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             }
         }
 
-        // Update the selectVariant function:
         function selectVariant(variantIndex) {
             currentVariant = variantIndex;
             highlightSelectedButton(variantSelection, `Variant ${variantIndex + 1}`);
             renderQuestion(currentQuestion);
-}
+        }
 
         // Render question and input fields
         function renderQuestion(question) {
@@ -194,7 +232,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             
             // Clear and set proper class on the container
             inputFieldsContainer.innerHTML = '';
-            inputFieldsContainer.className = 'input-fields';  // Make sure this class is set
+            inputFieldsContainer.className = 'input-fields';
             
             for (let i = 0; i < fieldNumber; i++) {
                 const inputGroup = document.createElement('div');
@@ -306,7 +344,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 
         // Function to split fields while preserving commas inside quotes
         function splitPreservingCommas(str) {
-            // Remove any surrounding quotes and split on commas
+            // Remove any surrounding quotes and split on forward slashes
             return str.split('/').map(s => s.trim());
         }
     }
