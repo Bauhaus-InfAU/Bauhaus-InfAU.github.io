@@ -283,7 +283,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             let allCorrect = true;
             userAnswers.forEach((answer, index) => {
                 const correctAnswer = correctAnswers[index];
-                const tolerance = Math.abs(correctAnswer) * 0.01;
+                const tolerance = Math.abs(correctAnswer) * 0.001;
                 if (Math.abs(answer - correctAnswer) <= tolerance) {
                     inputs[index].className = 'valid-input';
                 } else {
