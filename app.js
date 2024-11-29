@@ -89,10 +89,12 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             clearUI();
             // Highlight selected week
             highlightSelectedButton(weekSelection, `Week ${week}`);
+            // Clear previous task buttons
+            taskSelection.innerHTML = '';
             // Render tasks for the selected week
             const tasks = data.filter(item => item.week === week)
                               .map(item => item.task);
-            const uniqueTasks = [...new Set(tasks)];
+            const uniqueTasks = [...new Set(tasks)].sort((a, b) => a - b); // Sort tasks numerically
             uniqueTasks.forEach(task => {
                 const taskData = data.find(item => item.week === week && item.task === task);
                 if (!taskData) {
@@ -101,7 +103,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 }
                 const button = document.createElement('button');
                 button.textContent = `Task ${task}`;
-                button.className = 'task-button';
+                button.className = 'button'; // Match CSS class from styles.css
                 if (taskData.tags && taskData.tags.includes('bonus')) {
                     const badge = document.createElement('span');
                     badge.className = 'bonus-badge';
