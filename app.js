@@ -177,22 +177,24 @@ document.addEventListener('contextmenu', event => event.preventDefault());
         function renderQuestion(question) {
             if (question && question.question) {
                 questionContainer.textContent = question.question;
-                questionContainer.className = 'question-text';  // Make sure the question has the correct class
+                questionContainer.className = 'question-text';
             } else {
                 questionContainer.textContent = 'Question not available.';
                 return;
             }
             const fieldNumber = parseInt(question['field-number'], 10);
             const fieldNames = splitPreservingCommas(question['field-names']);
+            const defaultFieldName = fieldNames[0] || 'Input'; // Use first field name as default
+            
             inputFieldsContainer.innerHTML = '';
             for (let i = 0; i < fieldNumber; i++) {
                 const label = document.createElement('label');
-                label.textContent = fieldNames[i] || `Input ${i + 1}`;
+                label.textContent = defaultFieldName;
                 const input = document.createElement('input');
                 input.type = 'number';
                 input.step = 'any';
                 input.className = 'default-input';
-                input.placeholder = fieldNames[i] || `Input ${i + 1}`; // Add placeholder text
+                input.placeholder = defaultFieldName;
                 inputFieldsContainer.appendChild(label);
                 inputFieldsContainer.appendChild(input);
             }

@@ -121,13 +121,12 @@ label {
 }
 
 .question-text {
-    background-color: #a9abd1;
+    background-color: #cecfe4;
     color: var(--primary-text);
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
     font-size: 14px;
-    color: white;
 }
 
 .input-fields {
@@ -162,6 +161,20 @@ input[type="number"] {
     background-color: white;
     color: var(--primary-text);
     transition: all 0.3s ease;
+}
+
+input[type="number"]::placeholder {
+    color: var(--input-border);
+    opacity: 1; /* Firefox */
+    transition: opacity 0.3s ease;
+}
+
+input[type="number"]:hover::placeholder {
+    opacity: 0.5;
+}
+
+input[type="number"]:focus::placeholder {
+    opacity: 0;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
