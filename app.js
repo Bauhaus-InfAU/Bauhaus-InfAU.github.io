@@ -151,7 +151,9 @@ document.addEventListener('contextmenu', event => event.preventDefault());
         // Render variant selection if applicable
         function renderVariants(question) {
             const answers = splitPreservingCommas(question['field-answers']);
-            const numVariants = answers.length / question['field-number'];
+            // For unique variants, each answer is a separate variant
+            const numVariants = answers.length;
+            
             variantSelection.innerHTML = '';
             
             // Show variant label since we're displaying variant buttons
@@ -182,7 +184,10 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 questionContainer.textContent = 'Question not available.';
                 return;
             }
-            const fieldNumber = parseInt(question['field-number'], 10);
+            
+            // Always use field-number of 1 for unique variants since each answer is complete
+            const fieldNumber = question['unique-variant'] === 'yes' ? 1 : parseInt(question['field-number'], 10);
+            
             const fieldNames = splitPreservingCommas(question['field-names']);
             const defaultFieldName = fieldNames[0] || 'Input'; // Use first field name as default
             
@@ -286,7 +291,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
         // Function to split fields while preserving commas inside quotes
         function splitPreservingCommas(str) {
             // Remove any surrounding quotes and split on commas
-            return str.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(s => s.replace(/^"|"$/g, '').trim());
+            return str.split('/').map(s => s.trim());
         }
     }
 })();
