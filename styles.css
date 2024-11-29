@@ -74,14 +74,16 @@ label {
     white-space: nowrap;
 }
 
-.task-buttons {
+.week-buttons,
+.task-buttons,
+.variant-buttons {
     display: grid;
     gap: 10px;
     margin-bottom: 20px;
     grid-template-columns: repeat(4, 1fr);
 }
 
-.task-button {
+.button {
     position: relative;
     padding: 10px;
     border: 2px solid var(--button-border);
@@ -95,48 +97,53 @@ label {
     transition: all 0.3s ease;
 }
 
-.task-button:hover {
+.button:hover {
     background-color: var(--button-hover-bg);
     border-color: var(--accent);
     color: var(--button-hover-text);
 }
 
-.task-button.selected {
+.button.selected {
     background-color: var(--button-hover-bg);
     border-color: var(--accent);
     color: var(--button-hover-text);
 }
 
-.group-buttons {
-    display: grid;
-    gap: 10px;
+.bonus-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #FFD700;
+    color: black;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.question-text {
+    background-color: var(--bg-main);
+    padding: 15px;
+    border-radius: 8px;
     margin-bottom: 20px;
-    grid-template-columns: repeat(4, 1fr);
+    font-size: 14px;
 }
 
-.group-button {
-    padding: 10px;
-    border: 2px solid var(--button-border);
-    background-color: var(--button-bg);
-    color: var(--button-text);
-    border-radius: 100px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 400;
-    font-family: var(--font-main);
-    transition: all 0.3s ease;
+.input-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.group-button:hover {
-    background-color: var(--button-hover-bg);
-    border-color: var(--accent);
-    color: var(--button-hover-text);
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
-.group-button.selected {
-    background-color: var(--button-hover-bg);
-    border-color: var(--accent);
-    color: var(--button-hover-text);
+.input-label {
+    font-size: 14px;
+    color: var(--primary-text);
 }
 
 input[type="number"] {
@@ -145,43 +152,17 @@ input[type="number"] {
     border: 2px solid var(--input-border);
     border-radius: 48px;
     box-sizing: border-box;
-    font-size: 56px;
+    font-size: 24px;
     font-family: var(--font-main);
     text-align: center;
     -webkit-appearance: none;
     -moz-appearance: textfield;
     appearance: textfield;
-    background-color: white;
-    color: var(--primary-text);
-    transition: all 0.3s ease;
 }
 
 input[type="number"]:focus {
-    outline-color: var(--accent);
-}
-
-input[type="number"].valid-input {
-    border-color: var(--correct-border);
-    background-color: var(--correct-bg);
-    color: var(--correct-text);
-}
-
-input[type="number"].invalid-input {
-    border-color: var(--incorrect-border);
-    background-color: var(--incorrect-bg);
-    color: var(--incorrect-text);
-}
-
-input[type="number"].default-input {
-    border-color: var(--input-border);
-    background-color: white;
-    color: var(--primary-text);
-}
-
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+    outline: none;
+    border-color: var(--primary-color);
 }
 
 .submit-button {
@@ -195,18 +176,13 @@ input[type="number"]::-webkit-inner-spin-button {
     width: 100%;
     font-family: var(--font-main);
     font-weight: 400;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
-    transform: translate(0, 0);
 }
 
 .submit-button:hover {
     background-color: var(--primary-hover);
-    box-shadow: 0 2px 18px rgba(0,0,0,0.1);
-    transform: translate(0, -3px);
 }
 
-/* Result styles */
 #result {
     margin-top: 20px;
     padding: 15px;
@@ -218,23 +194,13 @@ input[type="number"]::-webkit-inner-spin-button {
 .correct {
     background-color: var(--correct-bg);
     color: var(--correct-text);
-    border: 0px solid var(--correct-border);
+    border: 1px solid var(--correct-border);
 }
 
 .incorrect {
     background-color: var(--incorrect-bg);
     color: var(--incorrect-text);
-    border: 0px solid var(--incorrect-border);
-}
-
-#result h3 {
-    margin-top: 0;
-    font-weight: 500;
-    margin-bottom: 8px;
-}
-
-#result p {
-    margin: 0;
+    border: 1px solid var(--incorrect-border);
 }
 
 /* Media Breakpoints */
