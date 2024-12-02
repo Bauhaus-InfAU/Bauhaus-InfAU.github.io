@@ -1,3 +1,6 @@
+/* Import IBM Plex Mono from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+
 :root {
     /* Primary colors */
     --primary-color: #3E47B1;
@@ -30,7 +33,7 @@
     --input-border: #a9abd1;
 
     /* Font settings */
-    --font-main: 'IBM Plex Mono', monospace;
+    --font-main: 'IBM Plex Mono', 'Consolas', 'Courier New', monospace;
 }
 
 body {
