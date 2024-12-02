@@ -2,25 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Score Checker</title>
-    <link rel="icon" type="image/svg+xml" href="checkicon.svg">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 </head>
 <body>
     <div class="container">
         <h1>SCORE CHECKER</h1>
-        <label for="week-selection">SELECT WEEK</label>
-        <div id="week-selection" class="week-buttons"></div>
-        <label for="task-selection">SELECT TASK</label>
-        <div id="task-selection" class="task-buttons"></div>
-        <label for="variant-selection">SELECT VARIANT</label>
-        <div id="variant-selection" class="variant-buttons"></div>
+
+        <div class="form-group">
+            <label for="week-selection">SELECT WEEK</label>
+            <div id="week-selection" class="week-buttons"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="task-selection">SELECT TASK</label>
+            <div id="task-selection" class="task-buttons"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="variant-selection">SELECT VARIANT</label>
+            <div id="variant-selection" class="variant-buttons"></div>
+        </div>
+
         <div id="question-container"></div>
         <div id="input-fields"></div>
         <button id="check-answer" class="submit-button">Check Answer</button>
         <div id="result"></div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

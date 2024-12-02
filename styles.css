@@ -44,13 +44,19 @@ body {
 }
 
 .container {
-    max-width: 500px;
-    margin: 0 auto;
+    max-width: 600px;
+    margin: 10px auto;
     background-color: var(--bg-container);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     min-height: 665px;
+}
+
+@media screen and (max-width: 800px) {
+    .container {
+        margin: 0 20px;
+    }
 }
 
 h1 {
@@ -59,8 +65,9 @@ h1 {
     margin-bottom: 20px;
     font-weight: 400;
     text-align: center;
-    font-size: clamp(32px, 10vw, 64px);
-    white-space: nowrap;
+    font-size: clamp(24px, 8vw, 64px);
+    white-space: normal;
+    overflow-wrap: break-word;
 }
 
 .form-group {
@@ -269,6 +276,14 @@ input[type="number"].invalid-input:hover {
 }
 
 @media screen and (max-width: 400px) {
+    .week-buttons,
+    .task-buttons,
+    .variant-buttons {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 350px) {
     .container {
         padding: 15px;
     }
