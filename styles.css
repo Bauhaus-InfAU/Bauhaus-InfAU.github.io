@@ -207,6 +207,13 @@ input[type="number"].default-input {
     color: var(--primary-text);
 }
 
+input[type="number"].valid-input:hover,
+input[type="number"].invalid-input:hover {
+    border-color: var(--input-border);
+    background-color: white;
+    color: var(--primary-text);
+}
+
 .submit-button {
     margin-top: 20px;
     background-color: var(--primary-color);
