@@ -71,6 +71,9 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             configurable: false
         });
 
+        // Hide check button initially
+        checkAnswerButton.style.display = 'none';
+
         // Hide all labels initially
         document.querySelectorAll('label').forEach(label => label.style.display = 'none');
         
@@ -201,7 +204,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             
             for (let i = 0; i < numVariants; i++) {
                 const button = document.createElement('button');
-                button.textContent = `Variant ${i + 1}`;
+                button.textContent = `Group ${i + 1}`;
                 button.className = 'button';
                 button.onclick = () => selectVariant(i);
                 variantSelection.appendChild(button);
@@ -210,7 +213,8 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 
         function selectVariant(variantIndex) {
             currentVariant = variantIndex;
-            highlightSelectedButton(variantSelection, `Variant ${variantIndex + 1}`);
+            // Highlight selected variant button
+            highlightSelectedButton(variantSelection, `Group ${variantIndex + 1}`);
             renderQuestion(currentQuestion);
         }
 
@@ -241,6 +245,11 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 input.type = 'number';
                 input.step = 'any';
                 input.className = 'default-input';
+                
+                // Add focus event handler to reset appearance
+                input.addEventListener('focus', function() {
+                    this.className = 'default-input';
+                });
                 
                 // If there's only one field name, use it for all inputs
                 // If there are multiple field names, use the corresponding one for each input
@@ -278,26 +287,28 @@ document.addEventListener('contextmenu', event => event.preventDefault());
         checkAnswerButton.onclick = () => {
             const inputs = [...inputFieldsContainer.querySelectorAll('input')];
             const userAnswers = inputs.map(input => parseFloat(input.value));
-            if (userAnswers.some(isNaN)) {
-                alert('Please fill in all input fields.');
-                return;
-            }
+            
             // Split answers and get the correct one for the current variant
             const allAnswers = currentQuestion['field-answers'].split('/').map(answer => parseFloat(answer.trim()));
             let correctAnswers;
             
             if (currentQuestion['unique-variant'] === 'yes') {
-                // For unique variants, use the answer corresponding to the selected variant
                 correctAnswers = [allAnswers[currentVariant]];
             } else {
                 correctAnswers = allAnswers;
             }
             
-            // Compare answers with improved feedback
+            // Compare only filled answers
             let allCorrect = true;
             const feedbacks = [];
             
             userAnswers.forEach((answer, index) => {
+                // Skip empty or invalid inputs
+                if (isNaN(answer)) {
+                    inputs[index].className = 'default-input';
+                    return;
+                }
+                
                 const correctAnswer = correctAnswers[index];
                 const tolerance = Math.abs(correctAnswer) * 0.001;
                 const percentDiff = ((answer - correctAnswer) / correctAnswer) * 100;
