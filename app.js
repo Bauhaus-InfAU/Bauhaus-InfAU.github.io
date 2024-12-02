@@ -260,6 +260,20 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             clearInputs();
         }
 
+        // Get feedback message based on percentage difference
+        function getFeedbackMessage(percentDiff) {
+            const absDiff = Math.abs(percentDiff);
+            if (absDiff <= 5) {
+                return "You're very close! Just a small adjustment needed in your calculations.";
+            } else if (absDiff <= 20) {
+                return percentDiff > 0 
+                    ? "Your answer is a bit high. Double-check your calculations." 
+                    : "Your answer is a bit low. Double-check your calculations.";
+            } else {
+                return "That's quite different from the expected result. Consider reviewing your approach - are you using the right formula?";
+            }
+        }
+
         // Check answer handler
         checkAnswerButton.onclick = () => {
             const inputs = [...inputFieldsContainer.querySelectorAll('input')];
@@ -279,22 +293,33 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 correctAnswers = allAnswers;
             }
             
-            // Compare answers with 1% tolerance
+            // Compare answers with improved feedback
             let allCorrect = true;
+            const feedbacks = [];
+            
             userAnswers.forEach((answer, index) => {
                 const correctAnswer = correctAnswers[index];
                 const tolerance = Math.abs(correctAnswer) * 0.001;
+                const percentDiff = ((answer - correctAnswer) / correctAnswer) * 100;
+                
                 if (Math.abs(answer - correctAnswer) <= tolerance) {
                     inputs[index].className = 'valid-input';
                 } else {
                     inputs[index].className = 'invalid-input';
                     allCorrect = false;
+                    feedbacks.push(getFeedbackMessage(percentDiff));
                 }
             });
-            // Display result
+
+            // Display result with feedback
             resultContainer.style.display = 'block';
             resultContainer.className = allCorrect ? 'correct' : 'incorrect';
-            resultContainer.textContent = allCorrect ? 'Correct!' : 'Incorrect. Please try again.';
+            if (allCorrect) {
+                resultContainer.textContent = 'Correct!';
+            } else {
+                // Show the feedback for the first incorrect answer
+                resultContainer.textContent = feedbacks[0] || 'Incorrect. Please try again.';
+            }
         };
 
         // Utility functions
