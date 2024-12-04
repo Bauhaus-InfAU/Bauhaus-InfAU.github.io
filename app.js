@@ -96,8 +96,10 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             currentVariant = null;
             currentQuestion = null;
             clearUI();
+            
             // Highlight selected week
             highlightSelectedButton(weekSelection, `Week ${week}`);
+            
             // Clear previous task buttons
             taskSelection.innerHTML = '';
             
@@ -110,7 +112,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             weekTasks.forEach(taskData => {
                 const taskNum = taskData.task;
                 const isBonus = taskData.tags && taskData.tags.includes('bonus');
-                const buttonKey = isBonus ? `${taskNum}-bonus` : `${taskNum}`;
+                const buttonKey = `${taskNum}-${isBonus ? 'bonus' : 'regular'}`;
                 
                 // Create button if it doesn't exist
                 if (!taskButtons.has(buttonKey)) {
@@ -127,7 +129,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                         button.textContent = `Task ${taskNum}`;
                     }
                     
-                    // Store both the button and the task data
+                    // Store button, task data, and bonus status
                     taskButtons.set(buttonKey, {
                         button,
                         taskData,
@@ -138,16 +140,23 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             
             // Sort and append buttons
             Array.from(taskButtons.entries())
-                .sort(([keyA], [keyB]) => {
-                    const taskA = parseInt(keyA.split('-')[0]);
-                    const taskB = parseInt(keyB.split('-')[0]);
-                    if (taskA === taskB) {
-                        // If task numbers are equal, non-bonus comes before bonus
-                        return keyA.includes('bonus') ? 1 : -1;
+                .sort(([keyA, _], [keyB, __]) => {
+                    // Split keys into task number and type (regular/bonus)
+                    const [taskA, typeA] = keyA.split('-');
+                    const [taskB, typeB] = keyB.split('-');
+                    
+                    // Compare task numbers first
+                    const taskNumA = parseInt(taskA);
+                    const taskNumB = parseInt(taskB);
+                    if (taskNumA !== taskNumB) {
+                        return taskNumA - taskNumB;
                     }
-                    return taskA - taskB;
+                    
+                    // If task numbers are equal, regular comes before bonus
+                    return typeA === 'bonus' ? 1 : -1;
                 })
                 .forEach(([_, {button, taskData, isBonus}]) => {
+                    // Add onclick handler that includes both task number and bonus status
                     button.onclick = () => selectTask(taskData.task, isBonus);
                     taskSelection.appendChild(button);
                 });
@@ -165,11 +174,20 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             currentQuestion = null;
             clearTaskUI();
             
-            // Highlight selected task
-            const taskText = `Task ${task}`;
-            highlightSelectedButton(taskSelection, taskText);
+            // Highlight only the button that matches both task number AND bonus status
+            const taskButtons = taskSelection.querySelectorAll('button');
+            taskButtons.forEach(button => {
+                const buttonText = button.childNodes[0].textContent.trim();
+                const buttonHasBonus = button.querySelector('.bonus-badge') !== null;
+                
+                if (buttonText === `Task ${task}` && buttonHasBonus === isBonus) {
+                    button.classList.add('selected');
+                } else {
+                    button.classList.remove('selected');
+                }
+            });
             
-            // Get question data matching both task number and bonus status
+            // Get question data matching both task number and bonus status exactly
             const questions = data.filter(item => 
                 item.week === currentWeek && 
                 item.task === task && 
@@ -221,7 +239,13 @@ document.addEventListener('contextmenu', event => event.preventDefault());
         // Render question and input fields
         function renderQuestion(question) {
             if (question && question.question) {
-                questionContainer.textContent = question.question;
+                // Replace \n with <br> tags for proper line breaks
+                const formattedQuestion = question.question.split('\n').map(line => {
+                    // Trim whitespace from each line
+                    return line.trim();
+                }).join('<br>');
+                
+                questionContainer.innerHTML = formattedQuestion;
                 questionContainer.className = 'question-text';
                 questionContainer.style.display = 'block';
             } else {
@@ -230,10 +254,10 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 return;
             }
             
+            // Rest of the function remains the same...
             const fieldNumber = question['unique-variant'] === 'yes' ? 1 : parseInt(question['field-number'], 10);
             const fieldNames = splitPreservingCommas(question['field-names']);
             
-            // Clear and set proper class on the container
             inputFieldsContainer.innerHTML = '';
             inputFieldsContainer.className = 'input-fields';
             
@@ -246,13 +270,10 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 input.step = 'any';
                 input.className = 'default-input';
                 
-                // Add focus event handler to reset appearance
                 input.addEventListener('focus', function() {
                     this.className = 'default-input';
                 });
                 
-                // If there's only one field name, use it for all inputs
-                // If there are multiple field names, use the corresponding one for each input
                 if (fieldNames.length === 1) {
                     input.placeholder = fieldNames[0];
                 } else {
