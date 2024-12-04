@@ -45,18 +45,17 @@ body {
 
 .container {
     max-width: 500px;
-    margin: 10px auto;
+    width: calc(100% - 40px);
+    margin: 50px auto;
     background-color: var(--bg-container);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    min-height: 665px;
-}
-
-@media screen and (max-width: 800px) {
-    .container {
-        margin: 0 20px;
-    }
+    min-height: unset;
+    position: relative;
+    font-size: clamp(14px, 2vw, 16px);
+    transition: all 0.3s ease;
+    
 }
 
 h1 {
@@ -163,7 +162,7 @@ input[type="number"] {
     border: 2px solid var(--input-border);
     border-radius: 48px;
     box-sizing: border-box;
-    font-size: 56px;
+    font-size: 44px;
     font-family: var(--font-main);
     text-align: center;
     -webkit-appearance: none;
@@ -267,6 +266,13 @@ input[type="number"].invalid-input:hover {
     border: 1px solid var(--incorrect-border);
 }
 
+@media screen and (max-width: 800px) {
+    .container {
+        margin: 20px auto;
+        min-height: unset;
+    }
+}
+
 @media screen and (max-width: 600px) {
     .week-buttons,
     .task-buttons,
@@ -281,17 +287,9 @@ input[type="number"].invalid-input:hover {
     .variant-buttons {
         grid-template-columns: 1fr;
     }
-}
-
-@media screen and (max-width: 350px) {
+    
     .container {
         padding: 15px;
-    }
-    
-    .week-buttons,
-    .task-buttons,
-    .variant-buttons {
-        grid-template-columns: 1fr;
     }
     
     input[type="number"] {
