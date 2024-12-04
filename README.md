@@ -2,7 +2,7 @@
 
 ## Overview
 
-Score Checker is a web-based tool designed for students to evaluate their answers for weekly tasks and variant-specific questions. The app dynamically processes question data from a CSV file and provides an intuitive interface for task selection and answer validation. It is deployed on GitHub Pages for easy access.
+Score Checker is a web-based tool designed for students to evaluate their answers for weekly tasks and questions. The app dynamically processes question data from a CSV file and provides an interface for task selection and answer validation. It is deployed on GitHub Pages for easy access.
 
 ## Features
 
@@ -10,9 +10,8 @@ Score Checker provides several key capabilities:
 
 - **Dynamic Question Loading**: processes questions directly from a CSV file
 - **Interactive UI**: enables selection of weeks, tasks, and question variants
-- **Real-time Feedback**: validates answers and provides tailored feedback
-- **Bonus Task Identification**: clearly highlights tasks tagged as "bonus"
-- **Responsive Design**: ensures seamless functionality across all devices
+- **Real-time Feedback**: validates answers and provides feedback
+- **Responsive Design**: ensures functionality across all devices
 
 ## Access
 
@@ -26,9 +25,9 @@ Internet connection to load the hosted CSV file
 ## File Structure
 
 - index.html - Main HTML file defining the page structure
-- styles.css - Stylesheet for responsive design and UI
+- styles.css - Stylesheet for design and UI
 - app.js - JavaScript logic for data handling, UI updates, and answer validation
-- course-questions.csv - CSV file containing question and answer data (hosted on GitHub Pages)
+- course-questions.csv - CSV file containing question and answer data
 
 ## Setup for Local Development
 
@@ -49,7 +48,7 @@ Internet connection to load the hosted CSV file
 
 1. Visit the hosted page or open index.html via a server
 2. Select Week: Choose a week to load related tasks
-3. Select Task: Pick a task, with bonus tasks clearly labeled
+3. Select Task: Pick a task
 4. Select Variant (if applicable): Choose a variant group for unique questions
 5. Answer the Question: Input your responses
 6. Check Answer: Submit your answer and receive feedback
