@@ -44,7 +44,7 @@ body {
 }
 
 .container {
-    max-width: 600px;
+    max-width: 500px;
     margin: 10px auto;
     background-color: var(--bg-container);
     padding: 20px;
@@ -89,7 +89,7 @@ label {
     display: grid;
     gap: 10px;
     margin-bottom: 20px;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .button {
@@ -136,14 +136,14 @@ label {
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .input-fields {
     display: flex;
     flex-direction: column;
     gap: 20px;  /* Increased gap for more noticeable spacing */
-    padding: 20px 0;  /* Added padding for better spacing */
+    padding: 20px 0; /* Added padding for better spacing */
 }
 
 .input-group {
