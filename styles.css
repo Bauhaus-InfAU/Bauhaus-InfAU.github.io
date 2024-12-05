@@ -2,36 +2,36 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 :root {
-    /* Primary colors */
-    --primary-color: #3E47B1;
-    --primary-hover: #3E47B1;
-    --primary-text: #3E47B1;
-    --accent: #3E47B1;
-    --offblack: #3E47B1;
-    --white: white;
+    /* Colors */
+    --primary-color: #3E47B1;  /* Main color */
+    --secondary-color: #CECFE4;  
+    --white: #FFFFFF;
+    --black: #000000;
+    
+    /* Text colors */
+    --text-color: var(--primary-color);
+    --button-text-color: var(--primary-color);
+    --button-hover-text-color: var(--white);
     
     /* Background colors */
-    --bg-main: #f5f5f5;
-    --bg-container: white;
+    --bg-main: #F5F5F5;
+    --bg-container: var(--white);
+    --bg-button: var(--white);
+    --bg-button-hover: var(--primary-color);
+    --bg-question-text: var(--secondary-color);
     
-    /* Button colors */
-    --button-bg: #ffffff;
-    --button-border: #3E47B1;
-    --button-text: #3E47B1;
-    --button-hover-bg: #3E47B1;
-    --button-hover-text: white;
+    /* Border colors */
+    --border-color: var(--primary-color);
+    --input-border-color: #A9ABD1;
     
     /* Result colors */
-    --correct-bg: #dff0d8;
-    --correct-text: #3c765b;
-    --correct-border: #84cc96;
-    --incorrect-bg: #f2dede;
-    --incorrect-text: #a94264;
-    --incorrect-border: #e794a2;
+    --correct-bg: #DFF0D8;
+    --correct-text: #3C765B;
+    --correct-border: #84CC96;
+    --incorrect-bg: #F2DEDE;
+    --incorrect-main: #A94264;
+    --incorrect-secondary: #E794A2;
     
-    /* Input colors */
-    --input-border: #a9abd1;
-
     /* Font settings */
     --font-main: 'IBM Plex Mono', 'Consolas', 'Courier New', monospace;
 }
@@ -51,17 +51,15 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    min-height: unset;
     position: relative;
     font-size: clamp(14px, 2vw, 16px);
     transition: all 0.3s ease;
-    
 }
 
 h1 {
     margin-top: 0;
-    color: var(--primary-text);
     margin-bottom: 20px;
+    color: var(--text-color);
     font-weight: 400;
     text-align: center;
     font-size: clamp(24px, 8vw, 64px);
@@ -77,9 +75,8 @@ label {
     display: block;
     margin-bottom: 10px;
     font-weight: 400;
-    color: var(--primary-text);
-    font-size: clamp(6px, 10vw, 18px);
-    white-space: nowrap;
+    color: var(--text-color);
+    font-size: clamp(14px, 4vw, 18px);
 }
 
 .week-buttons,
@@ -94,9 +91,9 @@ label {
 .button {
     position: relative;
     padding: 10px;
-    border: 2px solid var(--button-border);
-    background-color: var(--button-bg);
-    color: var(--button-text);
+    border: 2px solid var(--border-color);
+    background-color: var(--bg-button);
+    color: var(--button-text-color);
     border-radius: 100px;
     cursor: pointer;
     font-size: 16px;
@@ -105,16 +102,11 @@ label {
     transition: all 0.3s ease;
 }
 
-.button:hover {
-    background-color: var(--button-hover-bg);
-    border-color: var(--accent);
-    color: var(--button-hover-text);
-}
-
+.button:hover,
 .button.selected {
-    background-color: var(--button-hover-bg);
-    border-color: var(--accent);
-    color: var(--button-hover-text);
+    background-color: var(--bg-button-hover);
+    border-color: var(--border-color);
+    color: var(--button-hover-text-color);
 }
 
 .bonus-badge {
@@ -122,7 +114,7 @@ label {
     top: -8px;
     right: -8px;
     background-color: #FFD700;
-    color: var(--primary-text);
+    color: var(--text-color);
     font-size: 12px;
     padding: 2px 6px;
     border-radius: 10px;
@@ -130,8 +122,8 @@ label {
 }
 
 .question-text {
-    background-color: #cecfe4;
-    color: var(--primary-text);
+    background-color: var(--bg-question-text);
+    color: var(--text-color);
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
@@ -141,8 +133,8 @@ label {
 .input-fields {
     display: flex;
     flex-direction: column;
-    gap: 20px;  /* Increased gap for more noticeable spacing */
-    padding: 20px 0; /* Added padding for better spacing */
+    gap: 20px;
+    padding: 20px 0;
 }
 
 .input-group {
@@ -153,49 +145,44 @@ label {
 
 .input-label {
     font-size: 14px;
-    color: var(--primary-text);
+    color: var(--text-color);
 }
 
 input[type="number"] {
     width: 100%;
     padding: 8px;
-    border: 2px solid var(--input-border);
+    border: 2px solid var(--input-border-color);
     border-radius: 48px;
     box-sizing: border-box;
     font-size: 44px;
     font-family: var(--font-main);
     text-align: center;
-    -webkit-appearance: none;
-    -moz-appearance: textfield;
     appearance: textfield;
-    background-color: white;
-    color: var(--primary-text);
+    background-color: var(--white);
+    color: var(--text-color);
     transition: all 0.3s ease;
-    margin: 0;  /* Reset any default margins */
+    margin: 0;
 }
 
 input[type="number"]::placeholder {
-    color: var(--input-border);
-    opacity: 1; /* Firefox */
+    color: var(--input-border-color);
+    opacity: 1;
     transition: opacity 0.3s ease;
 }
 
-input[type="number"]:hover::placeholder {
-    opacity: 0;
-}
-
+input[type="number"]:hover::placeholder,
 input[type="number"]:focus::placeholder {
     opacity: 0;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
+    appearance: none;
     margin: 0;
 }
 
 input[type="number"]:focus {
-    outline-color: var(--accent);
+    outline-color: var(--border-color);
 }
 
 input[type="number"].valid-input {
@@ -205,28 +192,28 @@ input[type="number"].valid-input {
 }
 
 input[type="number"].invalid-input {
-    border-color: var(--incorrect-border);
+    border-color: var(--incorrect-secondary);
     background-color: var(--incorrect-bg);
-    color: var(--incorrect-text);
+    color: var(--incorrect-main);
 }
 
 input[type="number"].default-input {
-    border-color: var(--input-border);
-    background-color: white;
-    color: var(--primary-text);
+    border-color: var(--input-border-color);
+    background-color: var(--white);
+    color: var(--text-color);
 }
 
 input[type="number"].valid-input:hover,
 input[type="number"].invalid-input:hover {
-    border-color: var(--input-border);
-    background-color: white;
-    color: var(--primary-text);
+    border-color: var(--input-border-color);
+    background-color: var(--white);
+    color: var(--text-color);
 }
 
 .submit-button {
     margin-top: 20px;
     background-color: var(--primary-color);
-    color: white;
+    color: var(--white);
     padding: 12px 15px;
     border: none;
     border-radius: 24px;
@@ -241,7 +228,7 @@ input[type="number"].invalid-input:hover {
 }
 
 .submit-button:hover {
-    background-color: var(--primary-hover);
+    background-color: var(--primary-color);
     box-shadow: 0 2px 18px rgba(0,0,0,0.1);
     transform: translate(0, -3px);
 }
@@ -262,14 +249,13 @@ input[type="number"].invalid-input:hover {
 
 .incorrect {
     background-color: var(--incorrect-bg);
-    color: var(--incorrect-text);
-    border: 1px solid var(--incorrect-border);
+    color: var(--incorrect-main);
+    border: 1px solid var(--incorrect-secondary);
 }
 
 @media screen and (max-width: 800px) {
     .container {
         margin: 20px auto;
-        min-height: unset;
     }
 }
 
