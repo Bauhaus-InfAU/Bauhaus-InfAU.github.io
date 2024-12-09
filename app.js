@@ -12,29 +12,30 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             alert('Failed to load data. Please try again later.');
         });
 
-    function parseCSV(text) {
-        const results = Papa.parse(text, {
-            header: true,
-            skipEmptyLines: true,
-            dynamicTyping: true,
-            trimHeaders: true,
-        });
-
-        if (results.errors.length) {
-            console.error('CSV Parsing Errors:', results.errors);
+        function parseCSV(text) {
+            const results = Papa.parse(text, {
+                header: true,
+                skipEmptyLines: true,
+                dynamicTyping: true,
+                trimHeaders: true,
+            });
+        
+            if (results.errors.length) {
+                console.error('CSV Parsing Errors:', results.errors);
+            }
+        
+            return results.data.map(entry => ({
+                week: entry.week,
+                task: entry.task,
+                tags: entry.tags || '',
+                'unique-variant': entry['unique-variant'] || 'no',
+                question: entry.question || '',
+                'field-answers': entry['field-answers'] || '',
+                'field-number': entry['field-number'] || 1,
+                'field-names': entry['field-names'] || '',
+                tolerance: parseFloat(entry.tolerance) || 0.001, // Add default tolerance
+            }));
         }
-
-        return results.data.map(entry => ({
-            week: entry.week,
-            task: entry.task,
-            tags: entry.tags || '',
-            'unique-variant': entry['unique-variant'] || 'no',
-            question: entry.question || '',
-            'field-answers': entry['field-answers'] || '',
-            'field-number': entry['field-number'] || 1,
-            'field-names': entry['field-names'] || '',
-        }));
-    }
 
     function initializeApp(data) {
         const weeks = [...new Set(data.map(item => item.week))];
@@ -107,13 +108,28 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 }
             });
             
+            // Updated sorting logic
             Array.from(taskButtons.entries())
                 .sort(([keyA], [keyB]) => {
                     const [taskA, typeA] = keyA.split('-');
                     const [taskB, typeB] = keyB.split('-');
-                    return parseInt(taskA) !== parseInt(taskB) ? 
-                           parseInt(taskA) - parseInt(taskB) : 
-                           typeA === 'bonus' ? 1 : -1;
+                    
+                    // Split task numbers into main and sub-parts (e.g., "7.1" -> [7, 1])
+                    const [mainA, subA = 0] = taskA.toString().split('.').map(Number);
+                    const [mainB, subB = 0] = taskB.toString().split('.').map(Number);
+                    
+                    // First compare main task numbers
+                    if (mainA !== mainB) {
+                        return mainA - mainB;
+                    }
+                    
+                    // If main numbers are the same, compare sub-numbers
+                    if (subA !== subB) {
+                        return subA - subB;
+                    }
+                    
+                    // If both main and sub-numbers are the same, sort regular before bonus
+                    return typeA === 'bonus' ? 1 : -1;
                 })
                 .forEach(([_, {button, taskData, isBonus}]) => {
                     button.onclick = () => selectTask(taskData.task, isBonus);
@@ -286,7 +302,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 validAnswerIndices.forEach(index => {
                     const answer = userAnswers[index];
                     const correctAnswer = correctAnswers[index];
-                    const tolerance = Math.abs(correctAnswer) * 0.001;
+                    const tolerance = currentQuestion.tolerance; // Use the question-specific tolerance
                     const diff = Math.abs(answer - correctAnswer);
                     const percentDiff = ((answer - correctAnswer) / correctAnswer) * 100;
                     
@@ -305,7 +321,8 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 resultContainer.style.display = 'block';
                 resultContainer.className = allCorrect ? 'correct' : 'incorrect';
                 resultContainer.textContent = allCorrect ? 
-                    'Correct, congratulations!' : (feedbacks[0] || 'Incorrect. Please try again.');
+                    `Correct within tolerance of ${currentQuestion.tolerance}%, congratulations!` : 
+                    (feedbacks[0] || 'Incorrect. Please try again.');
             } catch (error) {
                 console.error('Error checking answer:', error);
                 resultContainer.style.display = 'block';

@@ -1,13 +1,14 @@
-week,task,tags,unique-variant,question,field-answers,field-number,field-names
-1,5,regular,yes,Calculate accessibility score for given location,19.5/70/35.8/90/19.5/125/45/28.3,1,Value
-2,1,regular,no,• What percentage of trips to ?,11,1,Percentage
-2,2,regular,no,• What percentage of trips to ?,22,1,Percentage
-2,3,regular,no,• What percentage of trips to ?,33,1,Percentage
-2,4,regular,no,• What percentage of trips to <b>restaurant</b> is between <b>10</b> and <b>20</b> minutes? <br><br>• What percentage of trips to <b>grocery store</b> is more than <b>30</b> minutes? <br><br>• What percentage of trips to <b>sport facility</b> is less than <b>20</b> minutes?,24/33/12,3,Percentage
-2,5,regular,no,• What is the willingness to walk to <b>restaurant</b> which is <b>5</b> minutes away? <br><br>• What is the willingness to walk to <b>grocery store</b> which is <b>15</b> minutes away? <br><br>• What is the willingness to walk to <b>sport facility</b> which is <b>30</b> minutes away? Describe the relationship between willingness to travel and distance.,19.5/53/23/11,4,Percentage
-2,6,regular,no,• What is the willingness to walk to <b>restaurant</b> which is <b>35</b> minutes away? <br><br>• What is the willingness to walk to <b>grocery store</b> which is <b>25</b> minutes away? <br><br>• What is the willingness to walk to <b>sport facility</b> which is <b>50</b> minutes away?,33/22/19.5,3,Percentage
-3,1,regular,no,Calculate accessibility for given location,19.5,1,Value
-3,2,regular,no,Calculate accessibility for given location,132/19.5,2,Value
-3,2,bonus,no,Calculate accessibility for given location,456/19.5,2,Min/Mean
-3,3,regular,no,Calculate accessibility for given location,66/62/11/19.5,4,Value
-3,3,bonus,no,Calculate accessibility for given location,123/19.5,2,Min/Mean
+week,task,tags,unique-variant,question,field-answers,field-number,field-names,tolerance
+1,5,regular,yes,Calculate accessibility score for given location,19.5/70/35.8/90/19.5/125/45/28.3,1,Value,0.001
+2,4,regular,no,• What percentage of trips with distance <b>up 5 minutes</b>? <br><br>• What is the percentage of trips with distance <b>between 10 and 15 minutes</b>? <br><br>• What is the percentage of trips with distance <b>between 30 and 60 minutes</b>?,10/10/20,3,Percentage,0.001
+2,5,regular,no,• What is the willingness to walk <b>5 minutes</b> (in percent)? <br><br>• What is the willingness to walk <b>15 minutes</b> (in percent)? <br><br>• What is the willingness to walk <b>30 minutes</b> (in percent)?,90/60/10,3,Percentage,0.001
+2,6,regular,no,• What is the willingness to walk <b>25 minutes</b> (in percent)? <br><br>• What is the willingness to walk <b>25 minutes</b> (in percent)?,23/7,2,Percentage,0.001
+2,7.1,regular,yes,Using <b>empirical data</b> calculate the willingness to walk <b>5 minutes</b> to your given travel purpose.,92/97/98/98/96/97/95,1,Percentage,0.001
+2,7.2,regular,yes,Using <b>empirical data</b> calculate the willingness to walk <b>15 minutes</b> to your given travel purpose.,58/73/84/73/65/71/71,1,Percentage,0.001
+2,7.4,regular,yes,Using the <b>distance decay curve</b> estimate the willingness to walk <b>25 minutes</b> to your given travel purpose.,8.7/15.7/45.6/42.6/19.3/13.5/40.1,1,Percentage,5
+2,7.5,regular,yes,Using the <b>distance decay curve</b> estimate the willingness to walk <b>35 minutes</b> to your given travel purpose.,1.3/3.2/29.4/30.4/6.6/2.3/28.1,1,Percentage,5
+3,1,regular,no,Calculate accessibility for given location,19.5,1,Value,0.001
+3,2,regular,no,Calculate accessibility for given location,132/19.5,2,Value,0.001
+3,2,bonus,no,Calculate accessibility for given location,456/19.5,2,Min/Mean,0.001
+3,3,regular,no,Calculate accessibility for given location,66/62/11/19.5,4,Value,0.001
+3,3,bonus,no,Calculate accessibility for given location,123/19.5,2,Min/Mean,0.001
