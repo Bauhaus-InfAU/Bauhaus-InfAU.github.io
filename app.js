@@ -274,7 +274,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             try {
                 // Ensure we have a valid answer string
                 const rawAnswers = String(currentQuestion['field-answers']).trim();
-                console.log('Raw Answers:', rawAnswers);
+                //console.log('Raw Answers:', rawAnswers);
                 
                 // Parse answers, handling both single values and arrays
                 const allAnswers = rawAnswers.includes('/') ? 
@@ -294,7 +294,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 let correctAnswers = currentQuestion['unique-variant'] === 'yes' ? 
                     [allAnswers[currentVariant]] : allAnswers;
                     
-                console.log('Correct Answers:', correctAnswers);
+                //console.log('Correct Answers:', correctAnswers);
                 
                 let allCorrect = true;
                 const feedbacks = [];
