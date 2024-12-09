@@ -321,7 +321,7 @@ document.addEventListener('contextmenu', event => event.preventDefault());
                 resultContainer.style.display = 'block';
                 resultContainer.className = allCorrect ? 'correct' : 'incorrect';
                 resultContainer.textContent = allCorrect ? 
-                    `Correct within tolerance of ${currentQuestion.tolerance}%, congratulations!` : 
+                    `Correct within tolerance of ±${currentQuestion.tolerance}%, congratulations!` : 
                     (feedbacks[0] || 'Incorrect. Please try again.');
             } catch (error) {
                 console.error('Error checking answer:', error);
